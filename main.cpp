@@ -11,8 +11,8 @@ struct Point
     double x, y;
     Point(double _x, double _y)
     {
-       x = _x;
-       y = _y;
+        x = _x;
+        y = _y;
     }
 };
 
@@ -29,8 +29,8 @@ struct Vector
 //cin, cout overload to Point and Vector
 istream& operator >> (istream& _in, Point& a)
 {
-   _in >> a.x >> a.y;
-   return _in;
+    _in >> a.x >> a.y;
+    return _in;
 }
 
 ostream& operator << (ostream& _out, Point a)
@@ -41,8 +41,8 @@ ostream& operator << (ostream& _out, Point a)
 
 istream& operator >> (istream& _in, Vector& a)
 {
-   _in >> a.x >> a.y;
-   return _in;
+    _in >> a.x >> a.y;
+    return _in;
 }
 
 ostream& operator << (ostream& _out, Vector a)
@@ -55,6 +55,11 @@ ostream& operator << (ostream& _out, Vector a)
 Vector operator - (Point a, Point b)
 {
     return Vector(a.x - b.x, a.y - b.y);
+}
+
+double Len(Vector a)
+{
+    return sqrt(a.x * a.x + a.y * a.y);
 }
 
 Vector operator + (Vector a, Vector b)
@@ -102,9 +107,16 @@ double operator ^ (Vector a, Vector b)
     return a.x * b.y - a.y * b.x;
 }
 
+
 struct Line
 {
     double a, b, c;
+    Line(double _a, double _b, double _c)
+    {
+        a = _a;
+        b = _b;
+        c = _c;
+    }
     Line(Point x, Point y)
     {
         a = y.y - x.y;
@@ -115,8 +127,37 @@ struct Line
     {
         Line(x, x + y);
     }
+    double operator [](Point x)
+    {
+        return a * x.x + b * x.y + c;
+    }
 };
 
+//Line operators
+bool OnLine(Line a, Point b)
+{
+    return Equal(a[b], 0);
+}
+
+Line operator * (Line a, double b)
+{
+    return Line(a.a * b, a.b * b, a.c * b);
+}
+
+Line operator / (Line a, double b)
+{
+    return a * (1 / b);
+}
+
+Vector GetNormal(Line a)
+{
+    return Vector(a.a, a.b);
+}
+
+Line Norm(Line a)
+{
+    return a / (Len(GetNormal(a)));
+}
 
 int main()
 {
