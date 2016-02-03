@@ -229,6 +229,7 @@ Point Intersect(Line a, Line b)
     return Point(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b), -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b));
 }
 
+
 int main()
 {
     Point a, b, c;
