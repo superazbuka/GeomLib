@@ -1,14 +1,18 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <string>
 
 using namespace std;
 
 const double EPS = 1e-5;
 
+string GeomLibTechOut = "";
+
 struct Point
 {
     double x, y;
+    Point(){}
     Point(double _x, double _y)
     {
         x = _x;
@@ -19,6 +23,7 @@ struct Point
 struct Vector
 {
     double x, y;
+    Vector(){}
     Vector(double _x, double _y)
     {
         x = _x;
@@ -111,6 +116,7 @@ double operator ^ (Vector a, Vector b)
 struct Line
 {
     double a, b, c;
+    Line(){}
     Line(double _a, double _b, double _c)
     {
         a = _a;
@@ -119,13 +125,20 @@ struct Line
     }
     Line(Point x, Point y)
     {
+        if (x == y)
+            GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in constructor: Line(Point, Point)\n";
         a = y.y - x.y;
         b = x.x - y.x;
         c = -a * x.x - b * x.y;
     }
-    Line(Point x, Vector y)
+    Line(Point x, Vector z)
     {
-        Line(x, x + y);
+        Point y = x + z;
+        if (x == y)
+            GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in constructor: Line(Point, Vector)\n";
+        a = y.y - x.y;
+        b = x.x - y.x;
+        c = -a * x.x - b * x.y;
     }
     double operator [](Point x)
     {
@@ -205,15 +218,23 @@ double serv_Det(double a, double b, double c, double d)
 Point Intersect(Line a, Line b)
 {
     if (GetTypeOfIntersect(a, b) == INF)
+    {
         return GetPointOnThisLine(a);
+    }
     if (GetTypeOfIntersect(a, b) == EMPTY)
     {
-        cout << "Runtime Eror: try to get element of empty set in function: Intersect(Line, Line)" << endl;
+        GeomLibTechOut += "Runtime Eror: try to get element of empty set in function: Intersect(Line, Line)\n";
         return Point(0, 0);
     }
-    return Point(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.c), -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.c));
+    return Point(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b), -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b));
 }
 
 int main()
 {
+    Point a, b, c;
+    cin >> a >> b >> c; 
+    Line f(a, b), s(a, c);
+    Point ans = Intersect(f, s);
+    cout << (ans == a) << endl;
+    cout << GeomLibTechOut;
 }
