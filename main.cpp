@@ -26,6 +26,7 @@ struct Vector
     }
 };
 
+//cin, cout overload to Point and Vector
 istream& operator >> (istream& _in, Point& a)
 {
    _in >> a.x >> a.y;
@@ -50,6 +51,7 @@ ostream& operator << (ostream& _out, Vector a)
     return _out;
 }
 
+//simple operators for Point and Vector
 Vector operator - (Point a, Point b)
 {
     return Vector(a.x - b.x, a.y - b.y);
@@ -78,6 +80,26 @@ bool operator == (Point a, Point b)
 bool operator == (Vector a, Vector b)
 {
     return Equal(a.x, b.x) and Equal(a.y, b.y);
+}
+
+Vector operator * (Vector a, double b)
+{
+    return Vector(a.x * b, a.y * b);
+}
+
+Vector operator / (Vector a, double b)
+{
+    return a * (1 / b);
+}
+
+double operator * (Vector a, Vector b)
+{
+    return a.x * b.x * a.y * b.y;
+}
+
+double operator ^ (Vector a, Vector b)
+{
+    return a.x * b.y - a.y * b.x;
 }
 
 struct Line
