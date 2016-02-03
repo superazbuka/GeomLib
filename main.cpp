@@ -144,6 +144,15 @@ Line operator * (Line a, double b)
     return Line(a.a * b, a.b * b, a.c * b);
 }
 
+Point GetPointOnThisLine(Line a)
+{
+    if (Equal(a.b, 0))
+    {
+        return Point(-a.c / a.a, 0);
+    }
+    return Point(0, -a.c / a.b);
+}
+
 Line operator / (Line a, double b)
 {
     return a * (1 / b);
@@ -154,9 +163,55 @@ Vector GetNormal(Line a)
     return Vector(a.a, a.b);
 }
 
+Vector GetDrective(Line a)
+{
+    return Vector(-a.b, a.a);
+}
+
 Line Norm(Line a)
 {
     return a / (Len(GetNormal(a)));
+}
+
+bool operator == (Line a, Line b)
+{
+    a = Norm(a);
+    b = Norm(b);
+    return Equal(a.a, b.a) and Equal(a.b, b.b)and Equal(a.c, b.c);
+}
+
+double Dist(Line a, Point b)
+{
+    a = Norm(a);
+    return a[b];
+}
+
+enum TypeOfIntersect {EMPTY, POINT, INF}; 
+
+TypeOfIntersect GetTypeOfIntersect(Line a, Line b)
+{
+    if (a == b)
+        return INF;
+    if (Equal(a.a / b.a, a.b / b.b))
+        return EMPTY;
+    return POINT;
+}
+
+double serv_Det(double a, double b, double c, double d)
+{
+    return a * d - b * c;
+}
+
+Point Intersect(Line a, Line b)
+{
+    if (GetTypeOfIntersect(a, b) == INF)
+        return GetPointOnThisLine(a);
+    if (GetTypeOfIntersect(a, b) == EMPTY)
+    {
+        cout << "Runtime Eror: try to get element of empty set in function: Intersect(Line, Line)" << endl;
+        return Point(0, 0);
+    }
+    return Point(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.c), -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.c));
 }
 
 int main()
