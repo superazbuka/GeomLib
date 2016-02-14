@@ -381,13 +381,13 @@ double Dist(Line a, Line b)
         return 0;
     else
     {
-        return abs(Norm(a).c - Norm(b).c);
+        return abs(GetNorm(a).c - GetNorm(b).c);
     }
 }
 
 double Dist(Line a, Point b)
 {
-    a = Norm(a);
+    a = GetNorm(a);
     return a[b];
 }
 
