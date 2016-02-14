@@ -52,8 +52,11 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 //constructors{
     //Point:
 	Point GetPoint(double _x, double _y);
+	Point GetPoint(Vector a);
     //Vector
 	Vector GetVector(double _x, double _y);
+	Vector GetVector(Point a);
+	Vector GetVector(Segment a);
     //Line:
 	Line GetLine(double _a, double _b, double _c);
 	Line GetLine(Point x, Point y);
@@ -62,8 +65,8 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	Line GetLine(Segment a);
     //Segment:
 	Segment GetSegment(Point _a, Point _b);
+	Segment GetSegment(Point _a, Vector b);
     //Ray:
-	Ray GetRay(Point _a, Point _b);
 	Ray GetRay(Point _a, Point _b);
 //}
 
@@ -88,6 +91,11 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	bool operator == (Vector a, Vector b);
     //Line:
 	bool operator == (Line a, Line b);
+    //Ray:
+
+	bool operator == (Ray a, Ray b);
+    //Segment:
+	bool operator == (Segment a, Segment b);
 //}
 
 //in/out{
@@ -96,12 +104,15 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	ostream& operator << (ostream& _out, Point a);
     //Vector:
 	istream& operator >> (istream& _in, Vector& a);
+	ostream& operator << (ostream& _in, Vector a);
     //Segment:
 	istream& operator >> (istream& _in, Segment& a);
 	ostream& operator << (ostream& _out, Segment a);
 //}
 
 //operators{
+    //Point:
+	Point operator + (Point a, Vector b);
     //Vector:
 	Vector operator + (Vector a, Vector b);
 	Vector operator * (Vector a, double b);
@@ -142,122 +153,229 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
     bool OnRay(Ray a, Point b);
     bool OnSegment(Segment a, Point b);
 //}
+//constructors{
+    //Point:
+	Point GetPoint(double _x, double _y)
+	{
+	    Point a;
+	    a.x = _x;
+	    a.y = _y;
+	    return a;
+	}
+	Point GetPoint(Vector a)
+	{
+	    Point b;
+	    b.x = a.x;
+	    b.y = a.y;
+	    return b;
+	}
+    //Vector
+	Vector GetVector(double _x, double _y)
+	{
+	    Vector x;
+	    x.x = _x;
+	    x.y = _y;
+	    return x;
+	}
+	Vector GetVector(Point a)
+	{
+	    return GetVector(a.x, a.y);
+	}
+	Vector GetVector(Segment a)
+	{
+	    return a.b - a.a;
+	}
+    //Line:
+	Line GetLine(double _a, double _b, double _c)
+	{
+	    Line x;
+	    x.a = _a;
+	    x.b = _b;
+	    x.c = _c;
+	    return x;
+	}
 
-bool Equal(double a, double b)
-{
-    return abs(a - b) < EPS;
-}
+	Line GetLine(Point x, Point y)
+	{
+	    Line z;
+	    if (x == y)
+		GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in function: GetLine(Point, Point)\n";
+	    z.a = y.y - x.y;
+	    z.b = x.x - y.x;
+	    z.c = -z.a * x.x - z.b * x.y;
+	    return z;
+	}
 
-Point GetPoint(double _x, double _y)
-{
-    Point a;
-    a.x = _x;
-    a.y = _y;
-    return a;
-}
+	Line GetLine(Point x, Vector z)
+	{
+	    Line k;
+	    Point y = x + z;
+	    if (x == y)
+		GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in function: GetLine(Point, Vector)\n";
+	    k.a = y.y - x.y;
+	    k.b = x.x - y.x;
+	    k.c = -k.a * x.x - k.b * x.y;
+	    return k;
+	}
+	Line GetLine(Ray a);
+	Line GetLine(Segment a);
+    //Segment:
+	Segment GetSegment(Point _a, Point _b);
+	Segment GetSegment(Point _a, Vector b);
+    //Ray:
+	Ray GetRay(Point _a, Point _b);
+//}
 
-bool operator == (Point a, Point b)
-{
-    return Equal(a.x, b.x) and Equal(a.y, b.y);
-}
+//another Gets{
+    //Point:
+	Point GetPointOnThisLine(Line a);
+    //Vector: 
+	Vector GetNormal(Line a);
+	Vector GetDrective(Line a);
+    //TypeOfIntersect:
+	TypeOfIntersect GetTypeOfIntersect(Line a, Line b);
+    //Line:
+	Line GetNorm(Line a);
+//}
 
-istream& operator >> (istream& _in, Point& a)
-{
-    _in >> a.x >> a.y;
-    return _in;
-}
+//equals{
+    //double
+	bool Equal(double a, double b)
+	{
+	    return abs(a - b) < EPS;
+	}
+    //Point:
+	bool operator == (Point a, Point b)
+	{
+	    return Equal(a.x, b.x) and Equal(a.y, b.y);
+	}
+    //Vector:
+    bool operator == (Vector a, Vector b)
+    {
+	return (Equal(b.x, a.x) and Equal(b.y, a.y));
+    }
+    //Line:
+	bool operator == (Line a, Line b);
+    //Ray:
+	bool operator == (Ray a, Ray b)
+	{
+	    return (a.a == b.a and a.b == b.b);
+	}
+    //Segment:
+	bool operator == (Segment a, Segment b)
+	{
+	    return (a.a == b.a and a.b == b.b) or (a.a == b.b and a.b == b.a);
+	}
+//}
 
-ostream& operator << (ostream& _out, Point a)
-{
-    _out << a.x << " " << a.y;
-    return _out;
-}
+//in/out{
+    //Point:
+	istream& operator >> (istream& _in, Point& a)
+	{
+	    _in >> a.x >> a.y;
+	    return _in;
+	}
 
-Vector GetVector(double _x, double _y)
-{
-    Vector x;
-    x.x = _x;
-    x.y = _y;
-    return x;
-}
+	ostream& operator << (ostream& _out, Point a)
+	{
+	    _out << a.x << " " << a.y;
+	    return _out;
+	}
+    //Vector:
+	istream& operator >> (istream& _in, Vector& a)
+	{
+	    _in >> a.x >> a.y;
+	    return _in;
+	}
 
-bool operator == (Vector a, Vector b)
-{
-    return (Equal(b.x, a.x) and Equal(b.y, a.y));
-}
+	ostream& operator << (ostream& _out, Vector a)
+	{
+	    _out << a.x << " " << a.y;
+	    return _out;
+	}
+    //Segment:
+	istream& operator >> (istream& _in, Segment& a);
+	ostream& operator << (ostream& _out, Segment a);
+//}
 
-double Len(Vector a)
-{
-    return sqrt(a.x * a.x + a.y * a.y);
-}
+//operators{
+    //Point:
+	Point operator + (Point a, Vector b)
+	{
+	    return GetPoint(a.x + b.x, a.y + b.y);
+	}
+    //Vector:
+	Vector operator + (Vector a, Vector b);
+	Vector operator * (Vector a, double b);
+	Vector operator * (double a, Vector b);
+	Vector operator / (Vector a, double b);
+	Vector operator + (Vector a, Vector b)
+	{
+	    return GetVector(a.x + b.x, a.y + b.y);
+	}
+	Vector operator - (Point a, Point b)
+	{
+	    return GetVector(a.x - b.x, a.y - b.y);
+	}
+    //Line:
+	Line operator * (Line a, double b);
+	Line operator / (Line a, double b);
+    //double:
+	double operator * (Vector a, Vector b);
+	double operator ^ (Vector a, Vector b);
+//}
 
-istream& operator >> (istream& _in, Vector& a)
-{
-    _in >> a.x >> a.y;
-    return _in;
-}
+//lens{
+    //Vector:
+	double Len(Vector a)
+	{
+	    return sqrt(a.x * a.x + a.y * a.y);
+	}
+//}
 
-ostream& operator << (ostream& _out, Vector a)
-{
-    _out << a.x << " " << a.y;
-    return _out;
-}
+//dists{
+    double Dist(Line a, Line b);
+    double Dist(Line a, Point b);
+    double Dist(Point a, Line b);
+    double Dist(Point a, Point b);
+    double Dist(Ray a, Point b);
+    double Dist(Point a, Ray b);
+    double Dist(Segment a, Point b);
+    double Dist(Point a, Segment b);
+//}
 
-Vector operator + (Vector a, Vector b)
-{
-    return GetVector(a.x + b.x, a.y + b.y);
-}
+//serv{
+    double serv_Det(double a, double b, double c, double d);
+//}
 
-Point operator + (Point a, Vector b)
-{
-    return GetPoint(a.x + b.x, a.y + b.y);
-}
+//intersections{
+    bool OnLine(Line a, Point b);
+    Point Intersect(Line a, Line b);
+    bool OnRay(Ray a, Point b);
+    bool OnSegment(Segment a, Point b);
+//}
 
-Vector operator - (Point a, Point b)
-{
-    return GetVector(a.x - b.x, a.y - b.y);
-}
-Line GetLine(double _a, double _b, double _c)
-{
-    Line x;
-    x.a = _a;
-    x.b = _b;
-    x.c = _c;
-    return x;
-}
 
-Line GetLine(Point x, Point y)
-{
-    Line z;
-    if (x == y)
-	GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in function: GetLine(Point, Point)\n";
-    z.a = y.y - x.y;
-    z.b = x.x - y.x;
-    z.c = -z.a * x.x - z.b * x.y;
-    return z;
-}
-
-Line GetLine(Point x, Vector z)
-{
-    Line k;
-    Point y = x + z;
-    if (x == y)
-	GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in function: Line(Point, Vector)\n";
-    k.a = y.y - x.y;
-    k.b = x.x - y.x;
-    k.c = -k.a * x.x - k.b * x.y;
-    return k;
-}
 Segment GetSegment(Point _a, Point _b)
 {
     Segment ans;
     if (_a == _b)
     {
-	GeomLibTechOut += "Runtime Eror: try to get segment by two eqal points in constructor: Segment(Point, Point)\n";
+	GeomLibTechOut += "Runtime Eror: try to get segment by two eqal points in constructor: GetSegment(Point, Point)\n";
     }
     ans.a = _a;
     ans.b = _b;
     return ans;
+}
+
+Segment GetSegment(Point _a, Vector _b)
+{
+    Segment ans;
+    if (Equal(Len(_b), 0))
+    {
+	GeomLibTechOut += "Runtime Eror: try to get segment by two eqal points in constructor: GetSegment(Point, Vector)\n";
+    }
+    return GetSegment(_a, _a + _b);
 }
 
 
@@ -418,6 +536,13 @@ double Dist(Point a, Ray b)
     return Dist(b, a);
 }
 
+Ray GetRay(Point a, Point b)
+{
+    Ray ans;
+    ans.a = a;
+    ans.b = b;
+    return ans;
+}
 
 istream& operator >> (istream& _in, Segment& a)
 {
@@ -453,7 +578,5 @@ double Dist(Point a, Segment b)
 
 int main()
 {
-    Vector a, b;
-    cin >> a;
-    cout << (a ^ (-1 * a)) << " " << (a ^ (2 * a)) << endl;
+    GetRay(GetPoint(0, 0), GetPoint(0, 1));
 }
