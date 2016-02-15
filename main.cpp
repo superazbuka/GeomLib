@@ -43,8 +43,6 @@ struct Segment/*{{{*/
     Segment(){}
 };/*}}}*/
 
-enum TypeOfIntersect {EMPTY, POINT, INF}; 
-
 //announcement
 
 //constructors{{{
@@ -171,6 +169,7 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 //}}}
 
 //dists{{{
+    double Dist(Line a, Ray b);
     double Dist(Line a, Line b);
     double Dist(Line a, Point b);
     double Dist(Point a, Line b);
@@ -186,8 +185,9 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 //}}}
 
 //intersections{{{
-    bool OnLine(Line a, Point b);
     vector<Point> Intersect(Line a, Line b);
+    vector<Point> Intersect(Line a, Line b);
+    bool OnLine(Line a, Point b);
     bool OnRay(Ray a, Point b);
     bool OnSegment(Segment a, Point b);
 //}}}
@@ -561,6 +561,20 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 //}}}
 
 //intersections{{{
+    vector<Point> Intersect(Line a, Ray b)
+    {
+	vector<Point> ans;
+	if (a == GetLine(b))
+	{
+	    GeomLibTechOut += "Warning: do you reali wont to intersect line and ray in this line in function Intersect(Ray, Line)";
+	    return vector<Point>({b.a});
+	}
+	ans = Intersect(a, GetLine(b));
+	if (ans.empty() or !OnRay(b, ans[0]))
+	    return ans;
+	else
+	    return vector<Point>();
+    }
     vector<Point> Intersect(Line a, Line b)
     {
 	if (a == b)
