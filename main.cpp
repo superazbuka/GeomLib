@@ -88,10 +88,6 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	Vector GetDrective(Line a);
     //}}}
 
-    //TypeOfIntersect{{{
-	TypeOfIntersect GetTypeOfIntersect(Line a, Line b);
-    //}}}
-
     //Line{{{
 	Line GetNorm(Line a);	
     //}}}
@@ -191,7 +187,7 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 
 //intersections{{{
     bool OnLine(Line a, Point b);
-    Point Intersect(Line a, Line b);
+    vector<Point> Intersect(Line a, Line b);
     bool OnRay(Ray a, Point b);
     bool OnSegment(Segment a, Point b);
 //}}}
@@ -326,17 +322,6 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	Vector GetDrective(Line a)
 	{
 	    return GetVector(-a.b, a.a);
-	}
-    //}}}
-
-    //TypeOfIntersect{{{
-	TypeOfIntersect GetTypeOfIntersect(Line a, Line b)
-	{
-	    if (a == b)
-		return INF;
-	    if (Equal(a.a / b.a, a.b / b.b))
-		return EMPTY;
-	    return POINT;
 	}
     //}}}
 
@@ -517,7 +502,7 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 //dists{{{
     double Dist(Line a, Line b)
     {
-	if (GetTypeOfIntersect(a, b) != EMPTY)
+	if (!Intersect(a, b).empty())
 	    return 0;
 	else
 	{
@@ -576,34 +561,33 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 //}}}
 
 //intersections{{{
-	Point Intersect(Line a, Line b)
+    vector<Point> Intersect(Line a, Line b)
+    {
+	if (a == b)
 	{
-	    if (GetTypeOfIntersect(a, b) == INF)
-	    {
-		return GetPointOnThisLine(a);
-	    }
-	    if (GetTypeOfIntersect(a, b) == EMPTY)
-	    {
-		GeomLibTechOut += "Runtime Eror: try to get element of empty set in function: Intersect(Line, Line)\n";
-		return GetPoint(0, 0);
-	    }
-	    return GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b),
-		    -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b));
+	    GeomLibTechOut += "Warning: do you realy wont to intersect 2 eqal lines in function Point Intersect(Line a, Line b)";
+	    return vector<Point>({GetPointOnThisLine(a)});
 	}
-	bool OnRay(Ray a, Point b)
+	if (Equal(a.a / b.a, a.b / b.b))
 	{
-	    return ((a.b - a.a) / Len(a.b - a.a) == (b - a.a) / Len(b - a.a));
+	    return vector<Point>();
 	}
-	bool OnLine(Line a, Point b)
-	{
-	    return Equal(a[b], 0);
-	}
-	bool OnSegment(Segment a, Point b)
-	{
-	    return OnRay(GetRay(a.a, a.b), b) and OnRay(GetRay(a.b, a.a), b);
-	}
+	return vector<Point>({GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b),
+		-serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b))});
+    }
+    bool OnRay(Ray a, Point b)
+    {
+	return ((a.b - a.a) / Len(a.b - a.a) == (b - a.a) / Len(b - a.a));
+    }
+    bool OnLine(Line a, Point b)
+    {
+	return Equal(a[b], 0);
+    }
+    bool OnSegment(Segment a, Point b)
+    {
+	return OnRay(GetRay(a.a, a.b), b) and OnRay(GetRay(a.b, a.a), b);
+    }
 //}}}
-
 
 int main()
 {
