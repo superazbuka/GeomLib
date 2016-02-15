@@ -9,23 +9,19 @@ const double EPS = 1e-5;
 
 string GeomLibTechOut = "";
 
-
-struct Point
+struct Point/*{{{*/
 {
     double x, y; 
     Point(){}
-};
+};/*}}}*/
 
-
-
-struct Vector
+struct Vector/*{{{*/
 {
     double x, y;
     Vector(){}
-};
+};/*}}}*/
 
-
-struct Line
+struct Line/*{{{*/
 {
     double a, b, c;
     Line(){}
@@ -33,106 +29,141 @@ struct Line
     {
         return a * x.x + b * x.y + c;
     }
-};
+};/*}}}*/
 
-struct Ray
+struct Ray/*{{{*/
 {
     Point a, b;
     Ray(){}
-};
+};/*}}}*/
 
-struct Segment
+struct Segment/*{{{*/
 {
     Point a, b;
     Segment(){}
-};
+};/*}}}*/
 
 enum TypeOfIntersect {EMPTY, POINT, INF}; 
 
-//constructors{
-    //Point:
+//announcement
+
+//constructors{{{
+    //Point{{{
 	Point GetPoint(double _x, double _y);
 	Point GetPoint(Vector a);
-    //Vector
+    //}}}
+
+    //Vector{{{
 	Vector GetVector(double _x, double _y);
 	Vector GetVector(Point a);
 	Vector GetVector(Segment a);
-    //Line:
+    //}}}
+
+    //Lin{{{
 	Line GetLine(double _a, double _b, double _c);
 	Line GetLine(Point x, Point y);
 	Line GetLine(Point x, Vector z);
 	Line GetLine(Ray a);
 	Line GetLine(Segment a);
-    //Segment:
+    //}}}
+
+    //Segment{{{
 	Segment GetSegment(Point _a, Point _b);
 	Segment GetSegment(Point _a, Vector b);
-    //Ray:
-	Ray GetRay(Point _a, Point _b);
-//}
+    //}}}
 
-//another Gets{
-    //Point:
+    //Ray{{{
+	Ray GetRay(Point _a, Point _b);
+    //}}}
+//}}}
+
+//another Gets{{{
+    //Point{{{
 	Point GetPointOnThisLine(Line a);
-    //Vector: 
+    //}}}
+
+    //Vector{{{
 	Vector GetNormal(Line a);
 	Vector GetDrective(Line a);
-    //TypeOfIntersect:
+    //}}}
+
+    //TypeOfIntersect{{{
 	TypeOfIntersect GetTypeOfIntersect(Line a, Line b);
-    //Line:
-	Line GetNorm(Line a);
-//}
+    //}}}
 
-//equals{
-    //double
+    //Line{{{
+	Line GetNorm(Line a);	
+    //}}}
+//}}}
+
+//equals{{{
+    //double{{{
 	bool Equal(double a, double b);
-    //Point:
+    //}}}
+    //Point{{{
 	bool operator == (Point a, Point b);
-    //Vector:
+    //}}}
+
+    //Vector{{{
 	bool operator == (Vector a, Vector b);
-    //Line:
+    //}}}
+
+    //Line{{{
 	bool operator == (Line a, Line b);
-    //Ray:
+    //}}}
 
+    //Ray{{{
 	bool operator == (Ray a, Ray b);
-    //Segment:
-	bool operator == (Segment a, Segment b);
-//}
+    //}}}
 
-//in/out{
-    //Point:
+    //Segment{{{
+	bool operator == (Segment a, Segment b);
+    //}}}
+//}}}
+
+//in/out{{{
+    //Point{{{
 	istream& operator >> (istream& _in, Point& a);
 	ostream& operator << (ostream& _out, Point a);
-    //Vector:
+    //}}}
+    //Vector{{{
 	istream& operator >> (istream& _in, Vector& a);
 	ostream& operator << (ostream& _in, Vector a);
-    //Segment:
+    //}}}
+    //Segment{{{
 	istream& operator >> (istream& _in, Segment& a);
 	ostream& operator << (ostream& _out, Segment a);
-//}
+    //}}}
+//}}}
 
-//operators{
-    //Point:
+//operators{{{
+    //Point{{{
 	Point operator + (Point a, Vector b);
-    //Vector:
+    //}}}
+    //Vector{{{
 	Vector operator + (Vector a, Vector b);
 	Vector operator * (Vector a, double b);
 	Vector operator * (double a, Vector b);
 	Vector operator / (Vector a, double b);
 	Vector operator - (Point a, Point b);
-    //Line:
+    //}}}
+    //Line{{{
 	Line operator * (Line a, double b);
 	Line operator / (Line a, double b);
-    //double:
+    //}}}
+    //double{{{
 	double operator * (Vector a, Vector b);
 	double operator ^ (Vector a, Vector b);
-//}
+    //}}}
+//}}}
 
-//lens{
-    //Vector:
+//lens{{{
+    //Vector{{{
 	double Len(Vector a);
-//}
+    //}}}
+//}}}
 
-//dists{
+//dists{{{
     double Dist(Line a, Line b);
     double Dist(Line a, Point b);
     double Dist(Point a, Line b);
@@ -141,20 +172,23 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
     double Dist(Point a, Ray b);
     double Dist(Segment a, Point b);
     double Dist(Point a, Segment b);
-//}
+//}}}
 
-//serv{
+//serv{{{
     double serv_Det(double a, double b, double c, double d);
-//}
+//}}}
 
-//intersections{
+//intersections{{{
     bool OnLine(Line a, Point b);
     Point Intersect(Line a, Line b);
     bool OnRay(Ray a, Point b);
     bool OnSegment(Segment a, Point b);
-//}
-//constructors{
-    //Point:
+//}}}
+
+//realization
+
+//constructors{{{
+    //Point{{{
 	Point GetPoint(double _x, double _y)
 	{
 	    Point a;
@@ -169,7 +203,9 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	    b.y = a.y;
 	    return b;
 	}
-    //Vector
+    //}}}
+
+    //Vector{{{
 	Vector GetVector(double _x, double _y)
 	{
 	    Vector x;
@@ -185,7 +221,9 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	{
 	    return a.b - a.a;
 	}
-    //Line:
+    //}}}
+
+    //Line{{{
 	Line GetLine(double _a, double _b, double _c)
 	{
 	    Line x;
@@ -217,59 +255,132 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	    k.c = -k.a * x.x - k.b * x.y;
 	    return k;
 	}
-	Line GetLine(Ray a);
-	Line GetLine(Segment a);
-    //Segment:
-	Segment GetSegment(Point _a, Point _b);
-	Segment GetSegment(Point _a, Vector b);
-    //Ray:
-	Ray GetRay(Point _a, Point _b);
-//}
+	Line GetLine(Ray a)
+	{
+	    return GetLine(a.a, a.b);
+	}
+	Line GetLine(Segment a)
+	{
+	    return GetLine(a.a, a.b);
+	}
+    //}}}
 
-//another Gets{
-    //Point:
-	Point GetPointOnThisLine(Line a);
-    //Vector: 
-	Vector GetNormal(Line a);
-	Vector GetDrective(Line a);
-    //TypeOfIntersect:
-	TypeOfIntersect GetTypeOfIntersect(Line a, Line b);
-    //Line:
-	Line GetNorm(Line a);
-//}
+    //Segment{{{
+	Segment GetSegment(Point _a, Point _b)
+	{
+	    Segment ans;
+	    ans.a = _a;
+	    ans.b = _b;
+	    return ans;
+	}
+	Segment GetSegment(Point _a, Vector _b)
+	{
+	    return GetSegment(_a, _a + _b);
+	}
+    //}}}
 
-//equals{
-    //double
+    //Ray{{{
+	Ray GetRay(Point a, Point b)
+	{
+	    Ray ans;
+	    ans.a = a;
+	    ans.b = b;
+	    return ans;
+	}
+    //}}}
+//}}}
+
+//another Gets{{{
+    //Point{{{
+	Point GetPointOnThisLine(Line a)
+	{
+	    if (Equal(a.b, 0))
+	    {
+		return GetPoint(-a.c / a.a, 0);
+	    }
+	    return GetPoint(0, -a.c / a.b);
+	}
+    //}}}
+
+    //Vector{{{
+	Vector GetNormal(Line a)
+	{
+	    return GetVector(a.a, a.b);
+	}
+
+	Vector GetDrective(Line a)
+	{
+	    return GetVector(-a.b, a.a);
+	}
+    //}}}
+
+    //TypeOfIntersect{{{
+	TypeOfIntersect GetTypeOfIntersect(Line a, Line b)
+	{
+	    if (a == b)
+		return INF;
+	    if (Equal(a.a / b.a, a.b / b.b))
+		return EMPTY;
+	    return POINT;
+	}
+    //}}}
+
+    //Line{{{
+	Line GetNorm(Line a)
+	{
+	    return a / (Len(GetNormal(a)));
+	}
+    //}}}
+//}}}
+
+//equals{{{
+    //double{{{
 	bool Equal(double a, double b)
 	{
 	    return abs(a - b) < EPS;
 	}
-    //Point:
+    //}}}
+
+    //Point{{{
 	bool operator == (Point a, Point b)
 	{
 	    return Equal(a.x, b.x) and Equal(a.y, b.y);
 	}
-    //Vector:
-    bool operator == (Vector a, Vector b)
-    {
-	return (Equal(b.x, a.x) and Equal(b.y, a.y));
-    }
-    //Line:
-	bool operator == (Line a, Line b);
-    //Ray:
+    //}}}
+
+    //Vector{{{
+	bool operator == (Vector a, Vector b)
+	{
+	    return (Equal(b.x, a.x) and Equal(b.y, a.y));
+	}
+    //}}}
+
+    //Line{{{
+	bool operator == (Line a, Line b)
+	{
+	    a = GetNorm(a);
+	    b = GetNorm(b);
+	    return Equal(a.a, b.a) and Equal(a.b, b.b)and Equal(a.c, b.c);
+	}
+    //}}}
+
+    //Ray{{{
 	bool operator == (Ray a, Ray b)
 	{
 	    return (a.a == b.a and a.b == b.b);
 	}
-    //Segment:
+    //}}}
+
+    //Segment{{{
 	bool operator == (Segment a, Segment b)
 	{
 	    return (a.a == b.a and a.b == b.b) or (a.a == b.b and a.b == b.a);
 	}
-//}
+    //}}}
+//}}}
 
-//in/out{
-    //Point:
+//in/out{{{
+    //Point{{{
 	istream& operator >> (istream& _in, Point& a)
 	{
 	    _in >> a.x >> a.y;
@@ -281,7 +392,9 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	    _out << a.x << " " << a.y;
 	    return _out;
 	}
-    //Vector:
+    //}}}
+
+    //Vector{{{
 	istream& operator >> (istream& _in, Vector& a)
 	{
 	    _in >> a.x >> a.y;
@@ -293,288 +406,182 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	    _out << a.x << " " << a.y;
 	    return _out;
 	}
-    //Segment:
-	istream& operator >> (istream& _in, Segment& a);
-	ostream& operator << (ostream& _out, Segment a);
-//}
+    //}}}
 
-//operators{
-    //Point:
+    //Segment{{{
+	istream& operator >> (istream& _in, Segment& a)
+	{
+	    _in >> a.b >> a.b;
+	    return _in;
+	}
+
+	ostream& operator << (ostream& _out, Segment a)
+	{
+	    _out << a.a << " " << a.b;
+	    return _out;
+	}
+    ///}}}
+
+///}}}
+
+//operators{{{
+    //Point{{{
 	Point operator + (Point a, Vector b)
 	{
 	    return GetPoint(a.x + b.x, a.y + b.y);
 	}
-    //Vector:
-	Vector operator + (Vector a, Vector b);
-	Vector operator * (Vector a, double b);
-	Vector operator * (double a, Vector b);
-	Vector operator / (Vector a, double b);
+    //}}}
+
+    //Vector{{{
+	Vector operator * (Vector a, double b)
+	{
+	    return GetVector(a.x * b, a.y * b);
+	}
+
+	Vector operator / (Vector a, double b)
+	{
+	    return a * (1 / b);
+	}
+
+	Vector operator * (double a, Vector b)
+	{
+	    return b * a;
+	}
+
 	Vector operator + (Vector a, Vector b)
 	{
 	    return GetVector(a.x + b.x, a.y + b.y);
 	}
+
 	Vector operator - (Point a, Point b)
 	{
 	    return GetVector(a.x - b.x, a.y - b.y);
 	}
-    //Line:
-	Line operator * (Line a, double b);
-	Line operator / (Line a, double b);
-    //double:
-	double operator * (Vector a, Vector b);
-	double operator ^ (Vector a, Vector b);
-//}
+    //}}}
 
-//lens{
-    //Vector:
+    //Line{{{
+	Line operator * (Line a, double b)
+	{
+	    return GetLine(a.a * b, a.b * b, a.c * b);
+	}
+
+	Line operator / (Line a, double b)
+	{
+	    return a * (1 / b);
+	}
+    //}}}
+
+    //double{{{
+	double operator * (Vector a, Vector b)
+	{
+	    return a.x * b.x * a.y * b.y;
+	}
+	double operator ^ (Vector a, Vector b)
+	{
+	    return a.x * b.y - a.y * b.x;
+	}
+    //}}}
+//}}}
+
+//lens{{{
+    //Vector{{{
 	double Len(Vector a)
 	{
 	    return sqrt(a.x * a.x + a.y * a.y);
 	}
-//}
+    //}}}
+//}}}
 
-//dists{
-    double Dist(Line a, Line b);
-    double Dist(Line a, Point b);
-    double Dist(Point a, Line b);
-    double Dist(Point a, Point b);
-    double Dist(Ray a, Point b);
-    double Dist(Point a, Ray b);
-    double Dist(Segment a, Point b);
-    double Dist(Point a, Segment b);
-//}
-
-//serv{
-    double serv_Det(double a, double b, double c, double d);
-//}
-
-//intersections{
-    bool OnLine(Line a, Point b);
-    Point Intersect(Line a, Line b);
-    bool OnRay(Ray a, Point b);
-    bool OnSegment(Segment a, Point b);
-//}
-
-
-Segment GetSegment(Point _a, Point _b)
-{
-    Segment ans;
-    if (_a == _b)
+//dists{{{
+    double Dist(Line a, Line b)
     {
-	GeomLibTechOut += "Runtime Eror: try to get segment by two eqal points in constructor: GetSegment(Point, Point)\n";
+	if (GetTypeOfIntersect(a, b) != EMPTY)
+	    return 0;
+	else
+	{
+	    return abs(GetNorm(a).c - GetNorm(b).c);
+	}
     }
-    ans.a = _a;
-    ans.b = _b;
-    return ans;
-}
 
-Segment GetSegment(Point _a, Vector _b)
-{
-    Segment ans;
-    if (Equal(Len(_b), 0))
+    double Dist(Line a, Point b)
     {
-	GeomLibTechOut += "Runtime Eror: try to get segment by two eqal points in constructor: GetSegment(Point, Vector)\n";
+	a = GetNorm(a);
+	return a[b];
     }
-    return GetSegment(_a, _a + _b);
-}
 
-
-Vector operator * (Vector a, double b)
-{
-    return GetVector(a.x * b, a.y * b);
-}
-
-Vector operator / (Vector a, double b)
-{
-    return a * (1 / b);
-}
-
-Vector operator * (double a, Vector b)
-{
-    return b * a;
-}
-
-double operator * (Vector a, Vector b)
-{
-    return a.x * b.x * a.y * b.y;
-}
-
-double operator ^ (Vector a, Vector b)
-{
-    return a.x * b.y - a.y * b.x;
-}
-
-
-//Line operators
-bool OnLine(Line a, Point b)
-{
-    return Equal(a[b], 0);
-}
-
-Line operator * (Line a, double b)
-{
-    return GetLine(a.a * b, a.b * b, a.c * b);
-}
-
-Point GetPointOnThisLine(Line a)
-{
-    if (Equal(a.b, 0))
+    double Dist(Point a, Line b)
     {
-        return GetPoint(-a.c / a.a, 0);
+	return Dist(b, a);
     }
-    return GetPoint(0, -a.c / a.b);
-}
 
-Line operator / (Line a, double b)
-{
-    return a * (1 / b);
-}
-
-Vector GetNormal(Line a)
-{
-    return GetVector(a.a, a.b);
-}
-
-Vector GetDrective(Line a)
-{
-    return GetVector(-a.b, a.a);
-}
-
-Line GetNorm(Line a)
-{
-    return a / (Len(GetNormal(a)));
-}
-
-bool operator == (Line a, Line b)
-{
-    a = GetNorm(a);
-    b = GetNorm(b);
-    return Equal(a.a, b.a) and Equal(a.b, b.b)and Equal(a.c, b.c);
-}
-
-TypeOfIntersect GetTypeOfIntersect(Line a, Line b)
-{
-    if (a == b)
-        return INF;
-    if (Equal(a.a / b.a, a.b / b.b))
-        return EMPTY;
-    return POINT;
-}
-
-
-double serv_Det(double a, double b, double c, double d)
-{
-    return a * d - b * c;
-}
-
-Point Intersect(Line a, Line b)
-{
-    if (GetTypeOfIntersect(a, b) == INF)
+    double Dist(Point a, Point b)
     {
-        return GetPointOnThisLine(a);
+	return Len(a - b);
     }
-    if (GetTypeOfIntersect(a, b) == EMPTY)
+
+    double Dist(Ray a, Point b)
     {
-        GeomLibTechOut += "Runtime Eror: try to get element of empty set in function: Intersect(Line, Line)\n";
-        return GetPoint(0, 0);
+	if (OnRay(a, b))
+	{
+	    return Dist(GetLine(a), b);
+	}
+	else
+	{
+	    return Dist(a.a, b);
+	}
     }
-    return GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b), -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b));
-}
-
-
-Line GetLine(Ray a)
-{
-    return GetLine(a.a, a.b);
-}
-
-bool OnRay(Ray a, Point b)
-{
-    return ((a.b - a.a) / Len(a.b - a.a) == (b - a.a) / Len(b - a.a));
-}
-
-//Dists
-double Dist(Line a, Line b)
-{
-    if (GetTypeOfIntersect(a, b) != EMPTY)
-        return 0;
-    else
+    double Dist(Point a, Ray b)
     {
-        return abs(GetNorm(a).c - GetNorm(b).c);
+	return Dist(b, a);
     }
-}
-
-double Dist(Line a, Point b)
-{
-    a = GetNorm(a);
-    return a[b];
-}
-
-double Dist(Point a, Line b)
-{
-    return Dist(b, a);
-}
-
-double Dist(Point a, Point b)
-{
-    return Len(a - b);
-}
-
-double Dist(Ray a, Point b)
-{
-    if (OnRay(a, b))
+    double Dist(Segment a, Point b)
     {
-        return Dist(GetLine(a), b);
+	return max(Dist(GetRay(a.a, a.b), b), Dist(GetRay(a.b, a.a), b));
     }
-    else
+
+    double Dist(Point a, Segment b)
     {
-        return Dist(a.a, b);
+	return Dist(b, a);
     }
-}
 
-double Dist(Point a, Ray b)
-{
-    return Dist(b, a);
-}
+//}}}
 
-Ray GetRay(Point a, Point b)
-{
-    Ray ans;
-    ans.a = a;
-    ans.b = b;
-    return ans;
-}
+//serv{{{
+    double serv_Det(double a, double b, double c, double d)
+    {
+	return a * d - b * c;
+    }
+//}}}
 
-istream& operator >> (istream& _in, Segment& a)
-{
-    _in >> a.b >> a.b;
-    return _in;
-}
+//intersections{{{
+	Point Intersect(Line a, Line b)
+	{
+	    if (GetTypeOfIntersect(a, b) == INF)
+	    {
+		return GetPointOnThisLine(a);
+	    }
+	    if (GetTypeOfIntersect(a, b) == EMPTY)
+	    {
+		GeomLibTechOut += "Runtime Eror: try to get element of empty set in function: Intersect(Line, Line)\n";
+		return GetPoint(0, 0);
+	    }
+	    return GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b),
+		    -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b));
+	}
+	bool OnRay(Ray a, Point b)
+	{
+	    return ((a.b - a.a) / Len(a.b - a.a) == (b - a.a) / Len(b - a.a));
+	}
+	bool OnLine(Line a, Point b)
+	{
+	    return Equal(a[b], 0);
+	}
+	bool OnSegment(Segment a, Point b)
+	{
+	    return OnRay(GetRay(a.a, a.b), b) and OnRay(GetRay(a.b, a.a), b);
+	}
+//}}}
 
-ostream& operator << (ostream& _out, Segment a)
-{
-    _out << a.a << " " << a.b;
-    return _out;
-}
-
-Line GetLine(Segment a)
-{
-    return GetLine(a.a, a.b);
-}
-
-bool OnSegment(Segment a, Point b)
-{
-    return OnRay(GetRay(a.a, a.b), b) and OnRay(GetRay(a.b, a.a), b);
-}
-
-double Dist(Segment a, Point b)
-{
-    return max(Dist(GetRay(a.a, a.b), b), Dist(GetRay(a.b, a.a), b));
-}
-
-double Dist(Point a, Segment b)
-{
-    return Dist(b, a);
-}
 
 int main()
 {
