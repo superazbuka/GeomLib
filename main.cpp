@@ -57,6 +57,7 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	Vector GetVector(double _x, double _y);
 	Vector GetVector(Point a);
 	Vector GetVector(Segment a);
+	Vector GetVector(Point a, Point b);
     //}}}
 
     //Lin{{{
@@ -100,6 +101,7 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
     //double{{{
 	bool Equal(double a, double b);
     //}}}
+
     //Point{{{
 	bool operator == (Point a, Point b);
     //}}}
@@ -126,10 +128,12 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	istream& operator >> (istream& _in, Point& a);
 	ostream& operator << (ostream& _out, Point a);
     //}}}
+	
     //Vector{{{
 	istream& operator >> (istream& _in, Vector& a);
 	ostream& operator << (ostream& _in, Vector a);
     //}}}
+
     //Segment{{{
 	istream& operator >> (istream& _in, Segment& a);
 	ostream& operator << (ostream& _out, Segment a);
@@ -140,6 +144,7 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
     //Point{{{
 	Point operator + (Point a, Vector b);
     //}}}
+	
     //Vector{{{
 	Vector operator + (Vector a, Vector b);
 	Vector operator * (Vector a, double b);
@@ -147,10 +152,12 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	Vector operator / (Vector a, double b);
 	Vector operator - (Point a, Point b);
     //}}}
+
     //Line{{{
 	Line operator * (Line a, double b);
 	Line operator / (Line a, double b);
     //}}}
+
     //double{{{
 	double operator * (Vector a, Vector b);
 	double operator ^ (Vector a, Vector b);
@@ -224,6 +231,10 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	Vector GetVector(Segment a)
 	{
 	    return a.b - a.a;
+	}
+	Vector GetVector(Point a, Point b)
+	{
+	    return b - a;
 	}
     //}}}
 
@@ -494,6 +505,7 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	    return sqrt(a.x * a.x + a.y * a.y);
 	}
     //}}}
+
     //Segments{{{
 	double Len(Segment a)
 	{
