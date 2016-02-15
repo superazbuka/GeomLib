@@ -161,6 +161,10 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
     //Vector{{{
 	double Len(Vector a);
     //}}}
+
+    //Segment{{{
+	double Len(Segment a);
+    //}}}
 //}}}
 
 //dists{{{
@@ -488,6 +492,12 @@ enum TypeOfIntersect {EMPTY, POINT, INF};
 	double Len(Vector a)
 	{
 	    return sqrt(a.x * a.x + a.y * a.y);
+	}
+    //}}}
+    //Segments{{{
+	double Len(Segment a)
+	{
+	    return Len(a.a - a.b);
 	}
     //}}}
 //}}}
