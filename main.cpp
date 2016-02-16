@@ -187,9 +187,9 @@ struct Segment/*{{{*/
 //intersections{{{
     vector<Point> Intersect(Line a, Line b);
     vector<Point> Intersect(Line a, Line b);
-    bool OnLine(Line a, Point b);
-    bool OnRay(Ray a, Point b);
-    bool OnSegment(Segment a, Point b);
+    vector<Point> Intersect(Line a, Point b);
+    vector<Point> Intersect(Ray a, Point b);
+    vector<Point> Intersect(Segment a, Point b);
 //}}}
 
 //realization
@@ -528,7 +528,7 @@ struct Segment/*{{{*/
 
     double Dist(Ray a, Point b)
     {
-	if (OnRay(a, b))
+	if (!Intersect(a, b).empty())
 	{
 	    return Dist(GetLine(a), b);
 	}
@@ -570,7 +570,7 @@ struct Segment/*{{{*/
 	    return vector<Point>({b.a});
 	}
 	ans = Intersect(a, GetLine(b));
-	if (ans.empty() or !OnRay(b, ans[0]))
+	if (ans.empty() or !Intersect(b, ans[0]).empty())
 	    return ans;
 	else
 	    return vector<Point>();
@@ -589,17 +589,28 @@ struct Segment/*{{{*/
 	return vector<Point>({GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b),
 		-serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b))});
     }
-    bool OnRay(Ray a, Point b)
+    vector<Point>Intersect(Ray a, Point b)
     {
-	return ((a.b - a.a) / Len(a.b - a.a) == (b - a.a) / Len(b - a.a));
+	if ((a.b - a.a) / Len(a.b - a.a) == (b - a.a) / Len(b - a.a))
+	{
+	    return vector<Point> ({b});
+	}
+	return vector<Point>{};
     }
-    bool OnLine(Line a, Point b)
+    vector<Point> Intersect(Line a, Point b)
     {
-	return Equal(a[b], 0);
+	if (Equal(a[b], 0))
+	{
+	    return {b};
+	}
+	return {};
     }
-    bool OnSegment(Segment a, Point b)
+    vector<Point> Intersect(Segment a, Point b)
     {
-	return OnRay(GetRay(a.a, a.b), b) and OnRay(GetRay(a.b, a.a), b);
+	if (!Intersect(GetRay(a.a, a.b), b).empty() and !Intersect(GetRay(a.b, a.a), b).empty())
+	    return {b};
+	else
+	    return {};
     }
 //}}}
 
