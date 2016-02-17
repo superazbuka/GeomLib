@@ -188,17 +188,26 @@ struct Segment/*{{{*/
 //}}}
 
 //intersections{{{
+    //Point{{{
+	vector<Point> Intersect(Point a, Line b);
+	vector<Point> Intersect(Point a, Ray b);
+	vector<Point> Intersect(Point a, Point b);
+	vector<Point> Intersect(Point a, Segment b);
+    //}}}
+
     //Line{{{
 	vector<Point> Intersect(Line a, Line b);
 	vector<Point> Intersect(Line a, Ray b);
 	vector<Point> Intersect(Line a, Point b);
 	vector<Point> Intersect(Line a, Segment b);
     //}}}
+
     //Ray{{{
 	vector<Point> Intersect(Ray a, Point b);
 	vector<Point> Intersect(Ray a, Ray b);
 	vector<Point> Intersect(Ray a, Segment b);
     //}}}
+
     //Segment{{{
 	vector<Point> Intersect(Segment a, Point b);
 	vector<Point> Intersect(Segment a, Segment b);
@@ -584,6 +593,28 @@ struct Segment/*{{{*/
 //}}}
 
 //intersections{{{
+    //Point{{{			
+	vector<Point> Intersect(Point a, Line b)
+	{
+	    return Intersect(b, a);
+	}
+	vector<Point> Intersect(Point a, Ray b)
+	{
+	    return Intersect(b, a);
+	}
+	vector<Point> Intersect(Point a, Point b)
+	{
+	    if (a == b)
+		return {a};
+	    else
+		return {};
+	}
+	vector<Point> Intersect(Point a, Segment b)
+	{
+	    return Intersect(b, a);
+	}
+    //}}}
+
     //Line{{{
 	vector<Point> Intersect(Line a, Point b)/*{{{*/
 	{
