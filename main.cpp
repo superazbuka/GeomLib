@@ -7,8 +7,6 @@ using namespace std;
 
 const double EPS = 1e-5;
 
-string GeomLibTechOut = "";
-
 struct Point/*{{{*/
 {
     double x, y; 
@@ -191,10 +189,11 @@ struct Segment/*{{{*/
 
 //intersections{{{
     vector<Point> Intersect(Line a, Line b);
-    vector<Point> Intersect(Line a, Line b);
+    vector<Point> Intersect(Line a, Ray b);
     vector<Point> Intersect(Line a, Point b);
     vector<Point> Intersect(Ray a, Point b);
     vector<Point> Intersect(Segment a, Point b);
+    vector<Point> Intersect(Line a, Segment b);
 //}}}
 
 //realization
@@ -252,8 +251,6 @@ struct Segment/*{{{*/
 	Line GetLine(Point x, Point y)
 	{
 	    Line z;
-	    if (x == y)
-		GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in function: GetLine(Point, Point)\n";
 	    z.a = y.y - x.y;
 	    z.b = x.x - y.x;
 	    z.c = -z.a * x.x - z.b * x.y;
@@ -264,8 +261,6 @@ struct Segment/*{{{*/
 	{
 	    Line k;
 	    Point y = x + z;
-	    if (x == y)
-		GeomLibTechOut += "Runtime Eror: try to get line by two eqal points in function: GetLine(Point, Vector)\n";
 	    k.a = y.y - x.y;
 	    k.b = x.x - y.x;
 	    k.c = -k.a * x.x - k.b * x.y;
@@ -580,12 +575,11 @@ struct Segment/*{{{*/
 //}}}
 
 //intersections{{{
-    vector<Point> Intersect(Line a, Ray b)
+    vector<Point> Intersect(Line a, Ray b)/*{{{*/
     {
 	vector<Point> ans;
 	if (a == GetLine(b))
 	{
-	    GeomLibTechOut += "Warning: do you reali wont to intersect line and ray in this line in function Intersect(Ray, Line)";
 	    return vector<Point>({b.a});
 	}
 	ans = Intersect(a, GetLine(b));
@@ -593,12 +587,12 @@ struct Segment/*{{{*/
 	    return ans;
 	else
 	    return vector<Point>();
-    }
-    vector<Point> Intersect(Line a, Line b)
+    }/*}}}*/
+
+    vector<Point> Intersect(Line a, Line b)/*{{{*/
     {
 	if (a == b)
 	{
-	    GeomLibTechOut += "Warning: do you realy wont to intersect 2 eqal lines in function Point Intersect(Line a, Line b)";
 	    return vector<Point>({GetPointOnThisLine(a)});
 	}
 	if (Equal(a.a / b.a, a.b / b.b))
@@ -607,30 +601,43 @@ struct Segment/*{{{*/
 	}
 	return vector<Point>({GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b),
 		-serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b))});
-    }
-    vector<Point>Intersect(Ray a, Point b)
+    }/*}}}*/
+
+    vector<Point>Intersect(Ray a, Point b)/*{{{*/
     {
 	if (Equal((a.b - a.a) ^ (b - a.a), 0) and (a.b - a.a) * (b - a.a) > -EPS)
 	{
 	    return vector<Point> ({b});
 	}
 	return vector<Point>{};
-    }
-    vector<Point> Intersect(Line a, Point b)
+    }/*}}}*/
+
+    vector<Point> Intersect(Line a, Point b)/*{{{*/
     {
 	if (Equal(a[b], 0))
 	{
 	    return {b};
 	}
 	return {};
-    }
-    vector<Point> Intersect(Segment a, Point b)
+    }/*}}}*/
+
+    vector<Point> Intersect(Segment a, Point b)/*{{{*/
     {
 	if (!Intersect(GetRay(a.a, a.b), b).empty() and !Intersect(GetRay(a.b, a.a), b).empty())
 	    return {b};
 	else
 	    return {};
-    }
+    }/*}}}*/
+
+    vector<Point> Intersect(Line a, Segment b)/*{{{*/
+    {
+	vector<Point> ans1 = Intersect(a, GetRay(b.a, b.b));
+	vector<Point> ans2 = Intersect(a, GetRay(b.b, b.a));
+	if (ans1.empty() or ans2.empty())
+	    return {};
+	else
+	    return ans1;
+    }/*}}}*/
 //}}}
 
 int main()
