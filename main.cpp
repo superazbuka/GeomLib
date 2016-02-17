@@ -132,6 +132,11 @@ struct Segment/*{{{*/
 	istream& operator >> (istream& _in, Segment& a);
 	ostream& operator << (ostream& _out, Segment a);
     //}}}
+
+    //Ray{{{
+	istream& operator >> (istream& _in, Ray& a);
+	ostream& operator << (ostream& _out, Ray a);
+    //}}}
 //}}}
 
 //operators{{{
@@ -411,7 +416,7 @@ struct Segment/*{{{*/
     //Segment{{{
 	istream& operator >> (istream& _in, Segment& a)
 	{
-	    _in >> a.b >> a.b;
+	    _in >> a.a >> a.b;
 	    return _in;
 	}
 
@@ -421,6 +426,20 @@ struct Segment/*{{{*/
 	    return _out;
 	}
     ///}}}
+
+    //Ray{{{
+	istream& operator >> (istream& _in, Ray& a)
+	{
+	    _in >> a.a >> a.b;
+	    return _in;
+	}
+
+	ostream& operator << (ostream& _out, Ray a)
+	{
+	    _out << a.a << " " << a.b;
+	    return _out;
+	}
+    //}}}
 
 ///}}}
 
@@ -591,7 +610,7 @@ struct Segment/*{{{*/
     }
     vector<Point>Intersect(Ray a, Point b)
     {
-	if ((a.b - a.a) / Len(a.b - a.a) == (b - a.a) / Len(b - a.a))
+	if (Equal((a.b - a.a) ^ (b - a.a), 0) and (a.b - a.a) * (b - a.a) > -EPS)
 	{
 	    return vector<Point> ({b});
 	}
@@ -616,5 +635,4 @@ struct Segment/*{{{*/
 
 int main()
 {
-    GetRay(GetPoint(0, 0), GetPoint(0, 1));
 }
