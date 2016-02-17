@@ -203,6 +203,7 @@ struct Segment/*{{{*/
     //}}}
 
     //Ray{{{
+	vector<Point> Intersect(Ray a, Line b);
 	vector<Point> Intersect(Ray a, Point b);
 	vector<Point> Intersect(Ray a, Ray b);
 	vector<Point> Intersect(Ray a, Segment b);
@@ -211,6 +212,8 @@ struct Segment/*{{{*/
     //Segment{{{
 	vector<Point> Intersect(Segment a, Point b);
 	vector<Point> Intersect(Segment a, Segment b);
+	vector<Point> Intersect(Segment a, Line b);
+	vector<Point> Intersect(Segment a, Ray b);
     //}}}
 //}}}
 
@@ -594,25 +597,28 @@ struct Segment/*{{{*/
 
 //intersections{{{
     //Point{{{			
-	vector<Point> Intersect(Point a, Line b)
+	vector<Point> Intersect(Point a, Line b)/*{{{*/
 	{
 	    return Intersect(b, a);
-	}
-	vector<Point> Intersect(Point a, Ray b)
+	}/*}}}*/
+
+	vector<Point> Intersect(Point a, Ray b)/*{{{*/
 	{
 	    return Intersect(b, a);
-	}
-	vector<Point> Intersect(Point a, Point b)
+	}/*}}}*/
+
+	vector<Point> Intersect(Point a, Point b)/*{{{*/
 	{
 	    if (a == b)
 		return {a};
 	    else
 		return {};
-	}
-	vector<Point> Intersect(Point a, Segment b)
+	}/*}}}*/
+
+	vector<Point> Intersect(Point a, Segment b)/*{{{*/
 	{
 	    return Intersect(b, a);
-	}
+	}/*}}}*/
     //}}}
 
     //Line{{{
@@ -665,6 +671,11 @@ struct Segment/*{{{*/
     //}}}
 
     //Ray{{{
+	vector<Point> Intersect(Ray a, Line b)/*{{{*/
+	{
+	    return Intersect(b, a);
+	}/*}}}*/
+
 	vector<Point> Intersect(Ray a, Point b)/*{{{*/
 	{
 	    if (Equal((a.b - a.a) ^ (b - a.a), 0) and (a.b - a.a) * (b - a.a) > -EPS)
@@ -711,6 +722,16 @@ struct Segment/*{{{*/
 		return {};
 	    else
 		return ans1;
+	}/*}}}*/
+
+	vector<Point> Intersect(Segment a, Line b)/*{{{*/
+	{
+	    return Intersect(b, a);
+	}/*}}}*/
+	
+	vector<Point> Intersect(Segment a, Ray b)/*{{{*/
+	{
+	    return Intersect(b, a);
 	}/*}}}*/
     //}}}
 //}}}
