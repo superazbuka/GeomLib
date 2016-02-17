@@ -172,15 +172,26 @@ struct Segment/*{{{*/
 //}}}
 
 //dists{{{
-    double Dist(Line a, Ray b);
-    double Dist(Line a, Line b);
-    double Dist(Line a, Point b);
-    double Dist(Point a, Line b);
-    double Dist(Point a, Point b);
-    double Dist(Ray a, Point b);
-    double Dist(Point a, Ray b);
-    double Dist(Segment a, Point b);
-    double Dist(Point a, Segment b);
+    //Point{{{
+	double Dist(Point a, Line b);
+	double Dist(Point a, Point b);
+	double Dist(Point a, Segment b);
+	double Dist(Point a, Ray b);
+    //}}}
+
+    //Line{{{
+	double Dist(Line a, Ray b);
+	double Dist(Line a, Line b);
+	double Dist(Line a, Point b);
+    //}}}
+
+    //Ray{{{
+	double Dist(Ray a, Point b);
+    //}}}
+
+    //Segment{{{
+	double Dist(Segment a, Point b);
+    //}}}
 //}}}
 
 //serv{{{
