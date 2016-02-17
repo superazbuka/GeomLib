@@ -188,12 +188,21 @@ struct Segment/*{{{*/
 //}}}
 
 //intersections{{{
-    vector<Point> Intersect(Line a, Line b);
-    vector<Point> Intersect(Line a, Ray b);
-    vector<Point> Intersect(Line a, Point b);
-    vector<Point> Intersect(Ray a, Point b);
-    vector<Point> Intersect(Segment a, Point b);
-    vector<Point> Intersect(Line a, Segment b);
+    //Line{{{
+	vector<Point> Intersect(Line a, Line b);
+	vector<Point> Intersect(Line a, Ray b);
+	vector<Point> Intersect(Line a, Point b);
+	vector<Point> Intersect(Line a, Segment b);
+    //}}}
+    //Ray{{{
+	vector<Point> Intersect(Ray a, Point b);
+	vector<Point> Intersect(Ray a, Ray b);
+	vector<Point> Intersect(Ray a, Segment b);
+    //}}}
+    //Segment{{{
+	vector<Point> Intersect(Segment a, Point b);
+	vector<Point> Intersect(Segment a, Segment b);
+    //}}}
 //}}}
 
 //realization
@@ -575,69 +584,104 @@ struct Segment/*{{{*/
 //}}}
 
 //intersections{{{
-    vector<Point> Intersect(Line a, Ray b)/*{{{*/
-    {
-	vector<Point> ans;
-	if (a == GetLine(b))
+    //Line{{{
+	vector<Point> Intersect(Line a, Point b)/*{{{*/
 	{
-	    return vector<Point>({b.a});
-	}
-	ans = Intersect(a, GetLine(b));
-	if (ans.empty() or !Intersect(b, ans[0]).empty())
-	    return ans;
-	else
-	    return vector<Point>();
-    }/*}}}*/
-
-    vector<Point> Intersect(Line a, Line b)/*{{{*/
-    {
-	if (a == b)
-	{
-	    return vector<Point>({GetPointOnThisLine(a)});
-	}
-	if (Equal(a.a / b.a, a.b / b.b))
-	{
-	    return vector<Point>();
-	}
-	return vector<Point>({GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b),
-		-serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b))});
-    }/*}}}*/
-
-    vector<Point>Intersect(Ray a, Point b)/*{{{*/
-    {
-	if (Equal((a.b - a.a) ^ (b - a.a), 0) and (a.b - a.a) * (b - a.a) > -EPS)
-	{
-	    return vector<Point> ({b});
-	}
-	return vector<Point>{};
-    }/*}}}*/
-
-    vector<Point> Intersect(Line a, Point b)/*{{{*/
-    {
-	if (Equal(a[b], 0))
-	{
-	    return {b};
-	}
-	return {};
-    }/*}}}*/
-
-    vector<Point> Intersect(Segment a, Point b)/*{{{*/
-    {
-	if (!Intersect(GetRay(a.a, a.b), b).empty() and !Intersect(GetRay(a.b, a.a), b).empty())
-	    return {b};
-	else
+	    if (Equal(a[b], 0))
+	    {
+		return {b};
+	    }
 	    return {};
-    }/*}}}*/
+	}/*}}}*/
 
-    vector<Point> Intersect(Line a, Segment b)/*{{{*/
-    {
-	vector<Point> ans1 = Intersect(a, GetRay(b.a, b.b));
-	vector<Point> ans2 = Intersect(a, GetRay(b.b, b.a));
-	if (ans1.empty() or ans2.empty())
+	vector<Point> Intersect(Line a, Line b)/*{{{*/
+	{
+	    if (a == b)
+	    {
+		return vector<Point>({GetPointOnThisLine(a)});
+	    }
+	    if (Equal(a.a / b.a, a.b / b.b))
+	    {
+		return vector<Point>();
+	    }
+	    return vector<Point>({GetPoint(-serv_Det(a.c, a.b, b.c, b.b) / serv_Det(a.a, a.b, b.a, b.b),
+		    -serv_Det(a.a, a.c, b.a, b.c) /  serv_Det(a.a, a.b, b.a, b.b))});
+	}/*}}}*/
+
+	vector<Point> Intersect(Line a, Segment b)/*{{{*/
+	{
+	    vector<Point> ans1 = Intersect(a, GetRay(b.a, b.b));
+	    vector<Point> ans2 = Intersect(a, GetRay(b.b, b.a));
+	    if (ans1.empty() or ans2.empty())
+		return {};
+	    else
+		return ans1;
+	}/*}}}*/
+
+	vector<Point> Intersect(Line a, Ray b)/*{{{*/
+	{
+	    vector<Point> ans;
+	    if (a == GetLine(b))
+	    {
+		return vector<Point>({b.a});
+	    }
+	    ans = Intersect(a, GetLine(b));
+	    if (ans.empty() or !Intersect(b, ans[0]).empty())
+		return ans;
+	    else
+		return vector<Point>();
+	}/*}}}*/
+    //}}}
+
+    //Ray{{{
+	vector<Point> Intersect(Ray a, Point b)/*{{{*/
+	{
+	    if (Equal((a.b - a.a) ^ (b - a.a), 0) and (a.b - a.a) * (b - a.a) > -EPS)
+	    {
+		return vector<Point> ({b});
+	    }
+	    return vector<Point>{};
+	}/*}}}*/
+
+	vector<Point> Intersect(Ray a, Ray b)/*{{{*/
+	{
+	    vector<Point> ans;
+	    ans = Intersect(GetLine(a), b);
+	    if (ans.empty() or !Intersect(a, ans[0]).empty())
+		return ans;
 	    return {};
-	else
-	    return ans1;
-    }/*}}}*/
+	}/*}}}*/
+
+	vector<Point> Intersect(Ray a, Segment b)/*{{{*/
+	{
+	    vector<Point> ans1 = Intersect(a, GetRay(b.a, b.b));
+	    vector<Point> ans2 = Intersect(a, GetRay(b.b, b.a));
+	    if (ans1.empty() or ans2.empty())
+		return {};
+	    else
+		return ans1;
+	}/*}}}*/
+    //}}}
+
+    //Segment{{{ 
+	vector<Point> Intersect(Segment a, Point b)/*{{{*/
+	{
+	    if (!Intersect(GetRay(a.a, a.b), b).empty() and !Intersect(GetRay(a.b, a.a), b).empty())
+		return {b};
+	    else
+		return {};
+	}/*}}}*/
+
+	vector<Point> Intersect(Segment a, Segment b)/*{{{*/
+	{
+	    vector<Point> ans1 = Intersect(GetRay(b.a, b.b), a);
+	    vector<Point> ans2 = Intersect(GetRay(b.b, b.a), a);
+	    if (ans1.empty() or ans2.empty())
+		return {};
+	    else
+		return ans1;
+	}/*}}}*/
+    //}}}
 //}}}
 
 int main()
