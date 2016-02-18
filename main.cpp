@@ -56,7 +56,7 @@ struct Segment/*{{{*/
 	Vector GetVector(Point a, Point b);
     //}}}
 
-    //Lin{{{
+    //Line{{{
 	Line GetLine(double _a, double _b, double _c);
 	Line GetLine(Point x, Point y);
 	Line GetLine(Point x, Vector z);
@@ -183,14 +183,17 @@ struct Segment/*{{{*/
 	double Dist(Line a, Ray b);
 	double Dist(Line a, Line b);
 	double Dist(Line a, Point b);
+	double Dist(Line a, Segment b);
     //}}}
 
     //Ray{{{
 	double Dist(Ray a, Point b);
+	double Dist(Ray a, Line b);
     //}}}
 
     //Segment{{{
 	double Dist(Segment a, Point b);
+	double Dist(Segment a, Line b);
     //}}}
 //}}}
 
@@ -584,6 +587,26 @@ struct Segment/*{{{*/
 	    a = GetNorm(a);
 	    return a[b];
 	}/*}}}*/
+
+	double Dist(Line a, Ray b)/*{{{*/
+	{
+	    if (!Intersect(a, b).empty())
+		return 0;
+	    double ans = Dist(a, GetLine(b));
+	    if (ans == 0)
+	    {
+		return Dist(a, b.a);
+	    }
+	    else
+	    {
+		return ans;
+	    }
+	}/*}}}*/
+
+	double Dist(Line a, Segment b)/*{{{*/
+	{
+	    return max(Dist(a, GetRay(b.a, b.b)), Dist(a, GetRay(b.b, b.a)));
+	}/*}}}*/
     //}}}
 
     //Ray{{{
@@ -598,12 +621,22 @@ struct Segment/*{{{*/
 		return Dist(a.a, b);
 	    }
 	}/*}}}*/
+    
+	double Dist(Ray a, Line b)/*{{{*/
+	{
+	    return Dist(b, a);
+	}/*}}}*/
     //}}}
 
     //Segment{{{
 	double Dist(Segment a, Point b)/*{{{*/
 	{
 	    return max(Dist(GetRay(a.a, a.b), b), Dist(GetRay(a.b, a.a), b));
+	}/*}}}*/
+
+	double Dist(Segment a, Line b)/*{{{*/
+	{
+	    return Dist(b, a);
 	}/*}}}*/
     //}}}
 //}}}
