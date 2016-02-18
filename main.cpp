@@ -546,57 +546,66 @@ struct Segment/*{{{*/
 //}}}
 
 //dists{{{
-    double Dist(Line a, Line b)
-    {
-	if (!Intersect(a, b).empty())
-	    return 0;
-	else
+    //Point{{{
+	double Dist(Point a, Line b)/*{{{*/
 	{
-	    return abs(GetNorm(a).c - GetNorm(b).c);
-	}
-    }
+	    return Dist(b, a);
+	}/*}}}*/
 
-    double Dist(Line a, Point b)
-    {
-	a = GetNorm(a);
-	return a[b];
-    }
-
-    double Dist(Point a, Line b)
-    {
-	return Dist(b, a);
-    }
-
-    double Dist(Point a, Point b)
-    {
-	return Len(a - b);
-    }
-
-    double Dist(Ray a, Point b)
-    {
-	if (!Intersect(a, b).empty())
+	double Dist(Point a, Point b)/*{{{*/
 	{
-	    return Dist(GetLine(a), b);
-	}
-	else
+	    return Len(a - b);
+	}/*}}}*/
+
+	double Dist(Point a, Segment b)/*{{{*/
 	{
-	    return Dist(a.a, b);
-	}
-    }
-    double Dist(Point a, Ray b)
-    {
-	return Dist(b, a);
-    }
-    double Dist(Segment a, Point b)
-    {
-	return max(Dist(GetRay(a.a, a.b), b), Dist(GetRay(a.b, a.a), b));
-    }
+	    return Dist(b, a);
+	}/*}}}*/
 
-    double Dist(Point a, Segment b)
-    {
-	return Dist(b, a);
-    }
+	double Dist(Point a, Ray b)/*{{{*/
+	{
+	    return Dist(b, a);
+	}/*}}}*/
+    //}}}
 
+    //Line{{{
+	double Dist(Line a, Line b)/*{{{*/
+	{
+	    if (!Intersect(a, b).empty())
+		return 0;
+	    else
+	    {
+		return abs(GetNorm(a).c - GetNorm(b).c);
+	    }
+	}/*}}}*/
+
+	double Dist(Line a, Point b)/*{{{*/
+	{
+	    a = GetNorm(a);
+	    return a[b];
+	}/*}}}*/
+    //}}}
+
+    //Ray{{{
+	double Dist(Ray a, Point b)/*{{{*/
+	{
+	    if (!Intersect(a, b).empty())
+	    {
+		return Dist(GetLine(a), b);
+	    }
+	    else
+	    {
+		return Dist(a.a, b);
+	    }
+	}/*}}}*/
+    //}}}
+
+    //Segment{{{
+	double Dist(Segment a, Point b)/*{{{*/
+	{
+	    return max(Dist(GetRay(a.a, a.b), b), Dist(GetRay(a.b, a.a), b));
+	}/*}}}*/
+    //}}}
 //}}}
 
 //serv{{{
