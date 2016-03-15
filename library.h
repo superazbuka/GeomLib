@@ -8,22 +8,52 @@
 typedef double FloatType;
 const FloatType EPS = 1e-5;
 
+/**
+ * @class Point
+ * @brief Point in a Cartesian plane class.
+*/
 struct Point/*{{{*/
 {
 public:
+	/**
+	 * Coordinate of point.
+	 */
+	/**@{*/
 	FloatType x, y;
+	/**@}*/
 };/*}}}*/
 
+/**
+ * @class Vector
+ * @brief Two-dimensional Euclidean vector class.
+ */
 struct Vector/*{{{*/
 {
 public:
+	/**
+	 * Component of vector.
+	 */
+	/**@{*/
 	FloatType x, y;
+	/**@}*/
 };/*}}}*/
 
+/**
+ * @class Line
+ * @brief Line in a Cartesian plane class.
+ *
+ * Equation: Ax + By + C = 0, where
+ * x and y are coordinates of point.
+ */
 struct Line/*{{{*/
 {
 public:
+	/**
+	 * Equation parameter.
+	 */
+	/**@{*/
 	FloatType a, b, c;
+	/**@}*/
 };/*}}}*/
 
 struct Ray/*{{{*/
