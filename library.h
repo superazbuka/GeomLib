@@ -245,5 +245,16 @@ vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(No
 
 //realization
 
+//constructors{{{
+//Point{{{
+Point GetPoint(FloatType x, FloatType y)
+{
+	Point p;
+	p.x = x;
+	p.y = y;
+	return p;
+}
+//}}}
+//}}}
 
 #endif //GEOMLIB_LIBRARY_H
