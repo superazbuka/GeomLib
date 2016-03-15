@@ -1,3 +1,7 @@
 main
 exec_*
+CMakeLists.txt
+GeomLib
 tmp
+html
+latex

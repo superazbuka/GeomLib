@@ -1,11 +1,9 @@
 #ifndef GEOMLIB_LIBRARY_H
 #define GEOMLIB_LIBRARY_H
 
-#include <iostream>
+#include <istream>
 #include <cmath>
 #include <vector>
-
-using namespace std;
 
 typedef double FloatType;
 const FloatType EPS = 1e-5;
@@ -96,6 +94,8 @@ Line GetNormalForm(Line a);
 
 //equals{{{
 //FloatType{{{
+
+//Test if two numbers with precision error are equal.
 bool Equal(FloatType a, FloatType b);
 //}}}
 
@@ -122,23 +122,23 @@ bool operator==(Segment a, Segment b);
 
 //in/out{{{
 //Point{{{
-istream& operator>>(istream& in, Point& a);
-ostream& operator<<(ostream& out, Point a);
+std::istream& operator>>(std::istream& in, Point& a);
+std::ostream& operator<<(std::ostream& out, Point a);
 //}}}
 
 //Vector{{{
-istream& operator>>(istream& in, Vector& a);
-ostream& operator<<(ostream& in, Vector a);
+std::istream& operator>>(std::istream& in, Vector& a);
+std::ostream& operator<<(std::ostream& in, Vector a);
 //}}}
 
 //Segment{{{
-istream& operator>>(istream& in, Segment& a);
-ostream& operator<<(ostream& out, Segment a);
+std::istream& operator>>(std::istream& in, Segment& a);
+std::ostream& operator<<(std::ostream& out, Segment a);
 //}}}
 
 //Ray{{{
-istream& operator>>(istream& in, Ray& a);
-ostream& operator<<(ostream& out, Ray a);
+std::istream& operator>>(std::istream& in, Ray& a);
+std::ostream& operator<<(std::ostream& out, Ray a);
 //}}}
 //}}}
 
@@ -215,44 +215,45 @@ FloatType GetDeterminant(FloatType a, FloatType b, FloatType c, FloatType d);
 
 //intersections{{{
 //Point{{{
-vector<Point> Intersect(Point a, Line b); //TODO: avoid
-vector<Point> Intersect(Point a, Ray b); //TODO: avoid
-vector<Point> Intersect(Point a, Point b); //TODO: avoid
-vector<Point> Intersect(Point a, Segment b); //TODO: avoid
+std::vector<Point> Intersect(Point a, Line b); //TODO: avoid
+std::vector<Point> Intersect(Point a, Ray b); //TODO: avoid
+std::vector<Point> Intersect(Point a, Point b); //TODO: avoid
+std::vector<Point> Intersect(Point a, Segment b); //TODO: avoid
 //}}}
 
 //Line{{{
-vector<Point> Intersect(Line a, Line b); //TODO: return type = Intersection(None, Point, Line)
-vector<Point> Intersect(Line a, Ray b); //TODO: return type = Intersection(None, Point, Ray)
-vector<Point> Intersect(Line a, Point b); //TODO: avoid
-vector<Point> Intersect(Line a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
+std::vector<Point> Intersect(Line a, Line b); //TODO: return type = Intersection(None, Point, Line)
+std::vector<Point> Intersect(Line a, Ray b); //TODO: return type = Intersection(None, Point, Ray)
+std::vector<Point> Intersect(Line a, Point b); //TODO: avoid
+std::vector<Point> Intersect(Line a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
 //}}}
 
 //Ray{{{
-vector<Point> Intersect(Ray a, Line b); //TODO: return type = Intersection(None, Point, Ray)
-vector<Point> Intersect(Ray a, Point b); //TODO: avoid
-vector<Point> Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
-vector<Point> Intersect(Ray a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
+std::vector<Point> Intersect(Ray a, Line b); //TODO: return type = Intersection(None, Point, Ray)
+std::vector<Point> Intersect(Ray a, Point b); //TODO: avoid
+std::vector<Point> Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
+std::vector<Point> Intersect(Ray a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
 //}}}
 
 //Segment{{{
-vector<Point> Intersect(Segment a, Point b); //TODO: avoid
-vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersection(None, Point, Segment)
-vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
+std::vector<Point> Intersect(Segment a, Point b); //TODO: avoid
+std::vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
+std::vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersection(None, Point, Segment)
+std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
 //}}}
 //}}}
 
 //realization
+bool Equal(const FloatType a, const FloatType b)
+{
+	return std::abs(a - b) <= EPS;
+}
 
 //constructors{{{
 //Point{{{
 Point GetPoint(FloatType x, FloatType y)
 {
-	Point p;
-	p.x = x;
-	p.y = y;
-	return p;
+	return {x, y};
 }
 //}}}
 //}}}
