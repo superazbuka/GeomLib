@@ -7,33 +7,31 @@ using namespace std;
 typedef double FloatType;
 const FloatType EPS = 1e-5;
 
-class Point/*{{{*/
+struct Point/*{{{*/
 {
 public:
     FloatType x, y; 
 };/*}}}*/
 
-class Vector/*{{{*/
+struct Vector/*{{{*/
 {
 public:
     FloatType x, y;
 };/*}}}*/
 
-class Line/*{{{*/
+struct Line/*{{{*/
 {
 public:
     FloatType a, b, c;
-
-	FloatType operator()(Point x);
 };/*}}}*/
 
-class Ray/*{{{*/
+struct Ray/*{{{*/
 {
 public:
     Point a, b; // maybe Point a, Vector v (v.x * v.x + v.y * v.y = 1)
 };/*}}}*/
 
-class Segment/*{{{*/
+struct Segment/*{{{*/
 {
 public:
     Point a, b;
