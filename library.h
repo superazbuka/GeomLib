@@ -12,7 +12,7 @@ const FloatType EPS = 1e-5;
  * @class Point
  * @brief Point in a Cartesian plane class.
 */
-struct Point/*{{{*/
+struct Point
 {
 public:
 	/**
@@ -21,13 +21,13 @@ public:
 	/**@{*/
 	FloatType x, y;
 	/**@}*/
-};/*}}}*/
+};
 
 /**
  * @class Vector
  * @brief Two-dimensional Euclidean vector class.
  */
-struct Vector/*{{{*/
+struct Vector
 {
 public:
 	/**
@@ -36,7 +36,7 @@ public:
 	/**@{*/
 	FloatType x, y;
 	/**@}*/
-};/*}}}*/
+};
 
 /**
  * @class Line
@@ -45,7 +45,7 @@ public:
  * Equation: Ax + By + C = 0, where
  * x and y are coordinates of point.
  */
-struct Line/*{{{*/
+struct Line
 {
 public:
 	/**
@@ -54,224 +54,183 @@ public:
 	/**@{*/
 	FloatType a, b, c;
 	/**@}*/
-};/*}}}*/
+};
 
-struct Ray/*{{{*/
+struct Ray
 {
 public:
 	Point a, b; // maybe Point a, Vector v (v.x * v.x + v.y * v.y = 1)
-};/*}}}*/
+};
 
-struct Segment/*{{{*/
+struct Segment
 {
 public:
 	Point a, b;
-};/*}}}*/
+};
 
-//announcement
 
-//constructors{{{
-//Point{{{
+
+//constructors
+//Point
 Point GetPoint(FloatType x, FloatType y);
 Point GetPoint(Vector v);
-//}}}
 
-//Vector{{{
+//Vector
 Vector GetVector(FloatType x, FloatType y);
 Vector GetVector(Point a);
 Vector GetVector(Ray s); //TODO: ??
 Vector GetVector(Point a, Point b);
-//}}}
 
-//Line{{{
+//Line
 Line GetLine(FloatType a, FloatType b, FloatType c);
 Line GetLine(Point x, Point y);
 Line GetLine(Point x, Vector v);
 Line GetLine(Ray r);
 Line GetLine(Segment s);
-//}}}
 
-//Segment{{{
+//Segment
 Segment GetSegment(Point a, Point b);
 Segment GetSegment(Point a, Vector v);
-//}}}
 
-//Ray{{{
+//Ray
 Ray GetRay(Point a, Point b);
 Ray GetRay(Point a, Vector v);
-//}}}
-//}}}
 
-//another Gets{{{
-//Point{{{
+//another Gets
+//Point
 Point GetPointOnThisLine(Line a); //TODO: try to avoid
-//}}}
 
-//Vector{{{
+//Vector
 Vector GetNormalVector(Line a); //TODO: normalize?
 Vector GetDirectiveVector(Line a); //TODO: normalize? nado li?
 Vector GetNormalForm(Vector v); //TODO: implement
-//}}}
 
-//Ray{{{
+//Ray
 Vector GetDirectiveVector(Ray a); //TODO: implement, normalize?
-//}}}
 
-//Line{{{
+//Line
 Line GetNormalForm(Line a);
-//}}}
-//}}}
 
-//equals{{{
-//FloatType{{{
+//equals
+//FloatType
 
 //Test if two numbers with precision error are equal.
 bool Equal(FloatType a, FloatType b);
-//}}}
 
-//Point{{{
+//Point
 bool operator==(Point a, Point b);
-//}}}
 
-//Vector{{{
+//Vector
 bool operator==(Vector a, Vector b);
-//}}}
 
-//Line{{{
+//Line
 bool operator==(Line a, Line b);
-//}}}
 
-//Ray{{{
+//Ray
 bool operator==(Ray a, Ray b);
-//}}}
 
-//Segment{{{
+//Segment
 bool operator==(Segment a, Segment b);
-//}}}
-//}}}
 
-//in/out{{{
-//Point{{{
+//in/out
+//Point
 std::istream& operator>>(std::istream& in, Point& a);
 std::ostream& operator<<(std::ostream& out, Point a);
-//}}}
 
-//Vector{{{
+//Vector
 std::istream& operator>>(std::istream& in, Vector& a);
 std::ostream& operator<<(std::ostream& in, Vector a);
-//}}}
 
-//Segment{{{
+//Segment
 std::istream& operator>>(std::istream& in, Segment& a);
 std::ostream& operator<<(std::ostream& out, Segment a);
-//}}}
 
-//Ray{{{
+//Ray
 std::istream& operator>>(std::istream& in, Ray& a);
 std::ostream& operator<<(std::ostream& out, Ray a);
-//}}}
-//}}}
 
-//operators{{{
-//Point{{{
+//operators
+//Point
 Point operator+(Point a, Vector b);
 Point operator-(Point a, Vector b);
-//}}}
 
-//Vector{{{
+//Vector
 Vector operator+(Vector a, Vector b);
 Vector operator*(Vector a, FloatType b);
 Vector operator*(FloatType a, Vector b);
 Vector operator/(Vector a, FloatType b);
 Vector operator-(Point a, Point b);
-//}}}
 
-//Line{{{
+//Line
 Line operator+(Line a, Vector v); //TODO: implement
 Line operator-(Line a, Vector v); //TODO: implement
 Line operator*(Line a, FloatType b);
 Line operator/(Line a, FloatType b);
-//}}}
 
-//FloatType{{{
+//FloatType
 FloatType operator*(Vector a, Vector b); //TODO: replace with functions
 FloatType operator^(Vector a, Vector b); //TODO: replace with functions
-//}}}
-//}}}
 
-//lens{{{
-//Vector{{{
+//lens
+//Vector
 FloatType Length(Vector a);
-//}}}
 
-//Segment{{{
+//Segment
 FloatType Length(Segment a);
-//}}}
-//}}}
+//
 
-//dists{{{
-//Point{{{
+//dists
+//Point
 FloatType Distance(Point a, Line b);
 FloatType Distance(Point a, Point b);
 FloatType Distance(Point a, Segment b);
 FloatType Distance(Point a, Ray b);
-//}}}
 
-//Line{{{
+//Line
 FloatType Distance(Line a, Ray b);
 FloatType Distance(Line a, Line b);
 FloatType Distance(Line a, Point b);
 FloatType Distance(Line a, Segment b);
-//}}}
 
-//Ray{{{
+//Ray
 FloatType Distance(Ray a, Point b);
 FloatType Distance(Ray a, Line b);
-FloatType Distance(Ray a, Ray b); //TODO: implement
-FloatType Distance(Ray a, Segment b); //TODO: implement
-//}}}
+FloatType Distance(Ray a, Ray b);
+FloatType Distance(Ray a, Segment b);
 
-//Segment{{{
+//Segment
 FloatType Distance(Segment a, Point b);
 FloatType Distance(Segment a, Line b);
 FloatType Distance(Segment a, Ray b); //TODO: implement
 FloatType Distance(Segment a, Segment b); //TODO: implement
-//}}}
-//}}}
 
-//serv{{{
+//serv
 FloatType GetDeterminant(FloatType a, FloatType b, FloatType c, FloatType d);
-//}}}
 
-//intersections{{{
-//Point{{{
+//intersections
+//Point
 std::vector<Point> Intersect(Point a, Line b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Ray b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Segment b); //TODO: avoid
-//}}}
 
-//Line{{{
+//Line
 std::vector<Point> Intersect(Line a, Line b); //TODO: return type = Intersection(None, Point, Line)
 std::vector<Point> Intersect(Line a, Ray b); //TODO: return type = Intersection(None, Point, Ray)
 std::vector<Point> Intersect(Line a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Line a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-//}}}
 
-//Ray{{{
+//Ray
 std::vector<Point> Intersect(Ray a, Line b); //TODO: return type = Intersection(None, Point, Ray)
 std::vector<Point> Intersect(Ray a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
 std::vector<Point> Intersect(Ray a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-//}}}
 
-//Segment{{{
+//Segment
 std::vector<Point> Intersect(Segment a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
-//}}}
-//}}}
 
 //realization
 bool Equal(const FloatType a, const FloatType b)
@@ -279,13 +238,11 @@ bool Equal(const FloatType a, const FloatType b)
 	return std::abs(a - b) <= EPS;
 }
 
-//constructors{{{
-//Point{{{
+//constructors
+//Point
 Point GetPoint(FloatType x, FloatType y)
 {
 	return {x, y};
 }
-//}}}
-//}}}
 
 #endif //GEOMLIB_LIBRARY_H
