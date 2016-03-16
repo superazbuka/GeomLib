@@ -316,5 +316,52 @@ Vector GetVector(Point a, Point b)
 	return {b.x - a.x, b.y - a.y};
 }
 
+Line GetLine(FloatType a, FloatType b, FloatType c)
+{
+	return {a, b, c};
+};
+
+Line GetLine(Point fp, Point sp)
+{
+	FloatType a = -sp.y + fp.y;
+	FloatType b = sp.x - fp.x;
+	FloatType c = -(a * fp.x + b * fp.y);
+	return GetLine(a, b, c);
+}
+
+Line GetLine(Point a, Vector v)
+{
+	return {-v.y, v.x, a.x * v.y - a.y * v.x};
+}
+
+Line GetLine(Ray r)
+{
+	return GetLine(r.a, r.v);
+}
+
+Line GetLine(Segment s)
+{
+	return GetLine(s.a, s.b);
+}
+
+Segment GetSegment(Point a, Point b)
+{
+	return {a, b};
+}
+
+Segment GetSegment(Point a, Vector v)
+{
+	return {a, GetPoint(a.x + v.x, a.y + v.y)};
+}
+
+Ray GetRay(Point a, Point b)
+{
+	return {a, GetVector(a, b)};
+}
+
+Ray GetRay(Point a, Vector v)
+{
+	return {a, v};
+}
 
 #endif //GEOMLIB_LIBRARY_H
