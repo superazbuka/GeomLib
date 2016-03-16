@@ -266,4 +266,27 @@ Point GetPoint(FloatType x, FloatType y)
 	return {x, y};
 }
 
+Point GetPoint(Vector v)
+{
+	return {v.x, v.y};
+}
+
+//Vector
+
+Vector GetVector(FloatType x, FloatType y)
+{
+	return {x, y};
+}
+
+Vector GetVector(Point a)
+{
+	return {a.x, a.y};
+}
+
+Vector GetVector(Point a, Point b)
+{
+	return {b.x - a.x, b.y - a.y};
+}
+
+
 #endif //GEOMLIB_LIBRARY_H
