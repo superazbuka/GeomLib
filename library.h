@@ -231,7 +231,7 @@ bool operator==(Segment a, Segment b);
 std::istream& operator>>(std::istream& in, Point& a);
 std::ostream& operator<<(std::ostream& out, Point a);
 std::istream& operator>>(std::istream& in, Vector& a);
-std::ostream& operator<<(std::ostream& in, Vector a);
+std::ostream& operator<<(std::ostream& out, Vector a);
 std::istream& operator>>(std::istream& in, Segment& a);
 std::ostream& operator<<(std::ostream& out, Segment a);
 std::istream& operator>>(std::istream& in, Ray& a);
@@ -378,6 +378,54 @@ Vector GetNormalForm(Vector v)
 Vector GetDirectiveVector(Ray a)
 {
 	return a.v;
+}
+
+std::istream& operator>>(std::istream& in, Point& a)
+{
+	in >> a.x >> a.y;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Point a)
+{
+	out << a.x << " " << a.y;
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Vector& a)
+{
+	in >> a.y >> a.y;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Vector a)
+{
+	out << a.x << " " << a.y;
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Segment& a)
+{
+	in >> a.a >> a.b;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Segment a)
+{
+	out << a.a << " " << a.b;
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Ray& a)
+{
+	in >> a.a >> a.v;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Ray a)
+{
+	out << a.a << " " << a.v;
+	return out;
 }
 
 #endif //GEOMLIB_LIBRARY_H
