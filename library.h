@@ -217,11 +217,10 @@ Ray GetRay(Point a, Vector v);
  * @}
  */
 
-Point GetPointOnThisLine(Line a); //TODO: try to avoid
-Vector GetNormalVector(Line a); //TODO: normalize?
-Vector GetDirectiveVector(Line a); //TODO: normalize? nado li?
-Vector GetNormalForm(Vector v); //TODO: implement
-Vector GetDirectiveVector(Ray a); //TODO: implement, normalize?
+Vector GetNormalVector(Line a);
+Vector GetNormalForm(Vector v);
+Vector GetDirectiveVector(Ray a);
+
 Line GetNormalForm(Line a);
 bool Equal(FloatType a, FloatType b);
 bool operator==(Point a, Point b);
@@ -362,6 +361,23 @@ Ray GetRay(Point a, Point b)
 Ray GetRay(Point a, Vector v)
 {
 	return {a, v};
+}
+ 
+
+Vector GetNormalVector(Line a)
+{
+	return GetVector(a.a, a.b);
+}
+
+Vector GetNormalForm(Vector v)
+{
+	FloatType len = std::sqrt(v.x * v.x + v.y * v.y);
+	return GetVector(v.x / len, v.y / len);
+}
+
+Vector GetDirectiveVector(Ray a)
+{
+	return a.v;
 }
 
 #endif //GEOMLIB_LIBRARY_H
