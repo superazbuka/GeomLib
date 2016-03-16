@@ -107,14 +107,8 @@ public:
  */
 /**
  * @brief Get point by two coordinates.
- * @param x x-coordinate.
- * @param y y-coordinate.
+ * @param x, y Coordinates.
  * @return point(x, y)
- *
- * Usage:
- * @code
- *    Point p = GetPoint(2, 8);
- * @endcode
  */
 Point GetPoint(FloatType x, FloatType y);
 
@@ -122,66 +116,102 @@ Point GetPoint(FloatType x, FloatType y);
  * @brief Get point by position vector.
  * @param v Position vector.
  * @return point(v.x, v.y)
- *
- * Usage:
- * @code
- *    Vector v = GetVector(3, 5);
- *    Point p = GetPoint(v);
- * @endcode
  */
 Point GetPoint(Vector v);
 
 /**
  * @brief Get vector by components.
- * @param x x-component.
- * @param y y-component.
+ * @param x, y Components.
  * @return vector(x, y)
- *
- * Usage:
- * @code
- *    Vector v = GetVector(3, 5);
- * @endcode
  */
 Vector GetVector(FloatType x, FloatType y);
 
 /**
  * @brief Get position vector for point.
- * @param a point.
+ * @param a Point.
  * @return vector(a.x, a.y)
- *
- * Usage:
- * @code
- *    Point a = GetPoint(2, 8);
- *    Vector v = GetVector(a);
- * @endcode
  */
 Vector GetVector(Point a);
 
 /**
  * @brief Get vector between points.
- * @param a start point.
- * @param b end point.
+ * @param a, b Endpoints.
  * @return vector(b.x - a.x, b.y - a.y)
- *
- * Usage:
- * @code
- *    Point a = GetPoint(2, 8);
- *    Point b = GetPoint(3, 5);
- *    Vector v = GetVector(a, b);
- * @endcode
  */
 Vector GetVector(Point a, Point b);
 
+/**
+ * @brief Get line by equation parameters.
+ * @param a, b, c Equation parameters.
+ * @exception if a == 0 and b == 0.
+ * @return line(a, b, c)
+ */
 Line GetLine(FloatType a, FloatType b, FloatType c);
-Line GetLine(Point x, Point y);
+
+/**
+ * @brief Get line by two points on it.
+ * @param a, b Points.
+ * @exception if a == b.
+ * @return line
+ */
+Line GetLine(Point a, Point b);
+
+/**
+ * @brief Get line by point and directive vector.
+ * @param a Point.
+ * @param v Directive vector.
+ * @exception if v.x == 0 and v.y == 0.
+ * @return line
+ */
 Line GetLine(Point x, Vector v);
+
+/**
+ * @brief Get line by ray.
+ * @param r Ray.
+ * @exception if r.v.x == 0 and r.v.y == 0.
+ * @return line
+ */
 Line GetLine(Ray r);
+
+/**
+ * @brief Get line by segment.
+ * @param s Segment.
+ * @exception if length(s) == 0.
+ * @return line
+ */
 Line GetLine(Segment s);
 
+/**
+ * @brief Get segment by endpoints.
+ * @param a, b Endpoints.
+ * @return segment
+ */
 Segment GetSegment(Point a, Point b);
+
+/**
+ * @brief Get segment by endpoint and directive vector.
+ * @param a Endpoint.
+ * @param v Directive vector.
+ * @return segment
+ */
 Segment GetSegment(Point a, Vector v);
 
+/**
+ * @brief Get ray by initial point and a point on it
+ * @param a Initial point.
+ * @param b Point on ray.
+ * @exception if a == b.
+ * @return ray
+ */
 Ray GetRay(Point a, Point b);
+
+/**
+ * @brief Get ray by initial point and a directive vector
+ * @param a Initial point.
+ * @param v Directive vector.
+ * @exception if v.x == 0 and v.y == 0.
+ * @return ray
+ */
 Ray GetRay(Point a, Vector v);
 /**
  * @}
@@ -270,8 +300,6 @@ Point GetPoint(Vector v)
 {
 	return {v.x, v.y};
 }
-
-//Vector
 
 Vector GetVector(FloatType x, FloatType y)
 {
