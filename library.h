@@ -316,5 +316,39 @@ Vector GetVector(Point a, Point b)
 	return {b.x - a.x, b.y - a.y};
 }
 
+Line GetLine(FloatType a, FloatType b, FloatType c)
+{
+	if(Equal(a, 0) and Equal(b, 0))
+		throw;
+	return {a, b, c};
+}
+
+Line GetLine(Point a, Point b)
+{
+	if(a == b)
+		throw;
+	return {b.y - a.y, a.x - b.x, b.x * a.y - a.x * b.y};
+}
+
+Line GetLine(Point a, Vector v)
+{
+	if(Equal(v.x, 0) and Equal(v.y, 0))
+		throw;
+	return {v.y, -v.x, a.y * v.x - a.x * v.y};
+}
+
+Line GetLine(Ray r)
+{
+	if(Equal(r.v.x, 0) and Equal(r.v.y, 0))
+		throw;
+	return {r.v.y, -r.v.x, r.a.y * r.v.x - r.a.x * r.v.y};
+}
+
+Line GetLine(Segment s)
+{
+	if(s.a == s.b)
+		throw;
+	return {s.b.y - s.a.y, s.a.x - s.b.x, s.b.x * s.a.y - s.a.x * s.b.y};
+}
 
 #endif //GEOMLIB_LIBRARY_H
