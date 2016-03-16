@@ -1,3 +1,8 @@
+/** @file library.h
+ * Geometry library for sportive programming.
+ */
+
+
 #ifndef GEOMLIB_LIBRARY_H
 #define GEOMLIB_LIBRARY_H
 
@@ -7,6 +12,11 @@
 
 typedef double FloatType;
 const FloatType EPS = 1e-5;
+
+/** @defgroup objects
+ * Elementary geometry data types
+ *  @{
+ */
 
 /**
  * @class Point
@@ -56,190 +66,201 @@ public:
 	/**@}*/
 };
 
+/**
+ * @class Ray
+ * @brief Ray in a Cartesian plane class.
+ */
 struct Ray
 {
 public:
-	Point a, b; // maybe Point a, Vector v (v.x * v.x + v.y * v.y = 1)
+	/**
+	 * Initial point of ray.
+	 */
+	Point a;
+	/**
+	 * Directive vector of ray.
+	 */
+	Vector v;
 };
 
+/**
+ * @class Segment
+ * @brief Segment in a Cartesian plane class.
+ */
 struct Segment
 {
 public:
+	/**
+	 * Endpoint of segment.
+	 */
+	/**@{*/
 	Point a, b;
+	/**@}*/
 };
+/**
+ * @}
+ */
 
-
-
-//constructors
-//Point
+/** @defgroup constructors
+ * Constructors for geometry objects.
+ *  @{
+ */
+/**
+ * @brief Get point by two coordinates.
+ * @param x x-coordinate.
+ * @param y y-coordinate.
+ * @return point(x, y)
+ *
+ * Usage:
+ * @code
+ *    Point p = GetPoint(2, 8);
+ * @endcode
+ */
 Point GetPoint(FloatType x, FloatType y);
+
+/**
+ * @brief Get point by position vector.
+ * @param v Position vector.
+ * @return point(v.x, v.y)
+ *
+ * Usage:
+ * @code
+ *    Vector v = GetVector(3, 5);
+ *    Point p = GetPoint(v);
+ * @endcode
+ */
 Point GetPoint(Vector v);
 
-//Vector
+/**
+ * @brief Get vector by components.
+ * @param x x-component.
+ * @param y y-component.
+ * @return vector(x, y)
+ *
+ * Usage:
+ * @code
+ *    Vector v = GetVector(3, 5);
+ * @endcode
+ */
 Vector GetVector(FloatType x, FloatType y);
+
+/**
+ * @brief Get position vector for point.
+ * @param a point.
+ * @return vector(a.x, a.y)
+ *
+ * Usage:
+ * @code
+ *    Point a = GetPoint(2, 8);
+ *    Vector v = GetVector(a);
+ * @endcode
+ */
 Vector GetVector(Point a);
-Vector GetVector(Ray s); //TODO: ??
+
+/**
+ * @brief Get vector between points.
+ * @param a start point.
+ * @param b end point.
+ * @return vector(b.x - a.x, b.y - a.y)
+ *
+ * Usage:
+ * @code
+ *    Point a = GetPoint(2, 8);
+ *    Point b = GetPoint(3, 5);
+ *    Vector v = GetVector(a, b);
+ * @endcode
+ */
 Vector GetVector(Point a, Point b);
 
-//Line
 Line GetLine(FloatType a, FloatType b, FloatType c);
 Line GetLine(Point x, Point y);
 Line GetLine(Point x, Vector v);
 Line GetLine(Ray r);
 Line GetLine(Segment s);
 
-//Segment
 Segment GetSegment(Point a, Point b);
 Segment GetSegment(Point a, Vector v);
 
-//Ray
 Ray GetRay(Point a, Point b);
 Ray GetRay(Point a, Vector v);
+/**
+ * @}
+ */
 
-//another Gets
-//Point
 Point GetPointOnThisLine(Line a); //TODO: try to avoid
-
-//Vector
 Vector GetNormalVector(Line a); //TODO: normalize?
 Vector GetDirectiveVector(Line a); //TODO: normalize? nado li?
 Vector GetNormalForm(Vector v); //TODO: implement
-
-//Ray
 Vector GetDirectiveVector(Ray a); //TODO: implement, normalize?
-
-//Line
 Line GetNormalForm(Line a);
-
-//equals
-//FloatType
-
-//Test if two numbers with precision error are equal.
 bool Equal(FloatType a, FloatType b);
-
-//Point
 bool operator==(Point a, Point b);
-
-//Vector
 bool operator==(Vector a, Vector b);
-
-//Line
 bool operator==(Line a, Line b);
-
-//Ray
 bool operator==(Ray a, Ray b);
-
-//Segment
 bool operator==(Segment a, Segment b);
-
-//in/out
-//Point
 std::istream& operator>>(std::istream& in, Point& a);
 std::ostream& operator<<(std::ostream& out, Point a);
-
-//Vector
 std::istream& operator>>(std::istream& in, Vector& a);
 std::ostream& operator<<(std::ostream& in, Vector a);
-
-//Segment
 std::istream& operator>>(std::istream& in, Segment& a);
 std::ostream& operator<<(std::ostream& out, Segment a);
-
-//Ray
 std::istream& operator>>(std::istream& in, Ray& a);
 std::ostream& operator<<(std::ostream& out, Ray a);
-
-//operators
-//Point
 Point operator+(Point a, Vector b);
 Point operator-(Point a, Vector b);
-
-//Vector
 Vector operator+(Vector a, Vector b);
 Vector operator*(Vector a, FloatType b);
 Vector operator*(FloatType a, Vector b);
 Vector operator/(Vector a, FloatType b);
 Vector operator-(Point a, Point b);
-
-//Line
 Line operator+(Line a, Vector v); //TODO: implement
 Line operator-(Line a, Vector v); //TODO: implement
 Line operator*(Line a, FloatType b);
 Line operator/(Line a, FloatType b);
-
-//FloatType
 FloatType operator*(Vector a, Vector b); //TODO: replace with functions
 FloatType operator^(Vector a, Vector b); //TODO: replace with functions
-
-//lens
-//Vector
 FloatType Length(Vector a);
-
-//Segment
 FloatType Length(Segment a);
-//
-
-//dists
-//Point
 FloatType Distance(Point a, Line b);
 FloatType Distance(Point a, Point b);
 FloatType Distance(Point a, Segment b);
 FloatType Distance(Point a, Ray b);
-
-//Line
 FloatType Distance(Line a, Ray b);
 FloatType Distance(Line a, Line b);
 FloatType Distance(Line a, Point b);
 FloatType Distance(Line a, Segment b);
-
-//Ray
 FloatType Distance(Ray a, Point b);
 FloatType Distance(Ray a, Line b);
 FloatType Distance(Ray a, Ray b);
 FloatType Distance(Ray a, Segment b);
-
-//Segment
 FloatType Distance(Segment a, Point b);
 FloatType Distance(Segment a, Line b);
 FloatType Distance(Segment a, Ray b); //TODO: implement
 FloatType Distance(Segment a, Segment b); //TODO: implement
-
-//serv
 FloatType GetDeterminant(FloatType a, FloatType b, FloatType c, FloatType d);
-
-//intersections
-//Point
 std::vector<Point> Intersect(Point a, Line b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Ray b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Segment b); //TODO: avoid
-
-//Line
 std::vector<Point> Intersect(Line a, Line b); //TODO: return type = Intersection(None, Point, Line)
 std::vector<Point> Intersect(Line a, Ray b); //TODO: return type = Intersection(None, Point, Ray)
 std::vector<Point> Intersect(Line a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Line a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-
-//Ray
 std::vector<Point> Intersect(Ray a, Line b); //TODO: return type = Intersection(None, Point, Ray)
 std::vector<Point> Intersect(Ray a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
 std::vector<Point> Intersect(Ray a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-
-//Segment
 std::vector<Point> Intersect(Segment a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
 
-//realization
 bool Equal(const FloatType a, const FloatType b)
 {
 	return std::abs(a - b) <= EPS;
 }
 
-//constructors
-//Point
 Point GetPoint(FloatType x, FloatType y)
 {
 	return {x, y};
