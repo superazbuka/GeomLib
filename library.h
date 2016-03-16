@@ -72,13 +72,42 @@ public:
 
 //constructors
 //Point
+
+/**
+ * @briefGet 2 FloatTypes return Point
+ *
+ * takes 2 FloatTypes returns a Point with coordinates equal to these 2 FloatTypes
+ */
 Point GetPoint(FloatType x, FloatType y);
+
+/**
+ * @brief Get Vector return Point
+ *
+ * Takes Vector returns a Point with coordinates equal to the coordinates of this Vector
+ */
 Point GetPoint(Vector v);
 
-//Vector
+//Vector;
+
+/**
+ * @briefGet 2 FloatTypes return Vector
+ *
+ * takes 2 FloatTypes returns a Vector with coordinates equal to these 2 FloatTypes
+ */
 Vector GetVector(FloatType x, FloatType y);
+
+/**
+ * @brief Get Point return Vector
+ *
+ * Takes Point returns a Vector with coordinates equal to the coordinates of this Point
+ */
 Vector GetVector(Point a);
-Vector GetVector(Ray s); //TODO: ??
+
+/**
+ * @brief Get 2 Points return Vector
+ *
+ * Constructing vector directed from point 1 to point 2
+ */
 Vector GetVector(Point a, Point b);
 
 //Line
@@ -233,6 +262,7 @@ std::vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersect
 std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
 
 //realization
+
 bool Equal(const FloatType a, const FloatType b)
 {
 	return std::abs(a - b) <= EPS;
@@ -240,9 +270,33 @@ bool Equal(const FloatType a, const FloatType b)
 
 //constructors
 //Point
+
 Point GetPoint(FloatType x, FloatType y)
 {
 	return {x, y};
 }
+
+Point GetPoint(Vector v)
+{
+	return {v.x, v.y};
+}
+
+//Vector
+
+Vector GetVector(FloatType x, FloatType y)
+{
+	return {x, y};
+}
+
+Vector GetVector(Point a)
+{
+	return {a.x, a.y};
+}
+
+Vector GetVector(Point a, Point b)
+{
+	return {b.x - a.x, b.y - a.y};
+}
+
 
 #endif //GEOMLIB_LIBRARY_H
