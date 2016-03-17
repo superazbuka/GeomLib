@@ -245,12 +245,15 @@ Vector operator*(Vector a, FloatType b);
 Vector operator*(FloatType a, Vector b);
 Vector operator/(Vector a, FloatType b);
 Vector operator-(Point a, Point b);
-Line operator+(Line a, Vector v); //TODO: implement
-Line operator-(Line a, Vector v); //TODO: implement
+
+Line operator+(Line a, Vector v);
+Line operator-(Line a, Vector v);
 Line operator*(Line a, FloatType b);
 Line operator/(Line a, FloatType b);
-FloatType operator*(Vector a, Vector b); //TODO: replace with functions
-FloatType operator^(Vector a, Vector b); //TODO: replace with functions
+
+FloatType DotProduct(Vector a, Vector b);
+FloatType CrossProduct(Vector a, Vector b);
+
 FloatType Length(Vector a);
 FloatType Length(Segment a);
 FloatType Distance(Point a, Line b);
@@ -489,6 +492,36 @@ std::ostream& operator<<(std::ostream& out, Ray a)
 {
 	out << a.p << " " << a.v;
 	return out;
+}
+
+Line operator+(Line a, Vector v)
+{
+	return {a.a, a.b, a.c + DotProduct(GetNormalForm(GetNormalVector(a)), v)};
+}
+
+Line operator-(Line a, Vector v)
+{
+	return {a.a, a.b, a.c - DotProduct(GetNormalForm(GetNormalVector(a)), v)};
+}
+
+FloatType DotProduct(Vector a, Vector b)
+{
+	return a.x * b.x + a.y * b.y;
+}
+
+FloatType CrossProduct(Vector a, Vector b)
+{
+	return a.x * b.y - a.y * b.x;
+}
+
+Line operator*(Line a, FloatType b)
+{
+	return GetLine(a.a * b, a.b * b, a.c * b);
+}
+
+Line operator/(Line a, FloatType b)
+{
+	return GetLine(a.a / b, a.b / b, a.c / b);
 }
 
 #endif //GEOMLIB_LIBRARY_H
