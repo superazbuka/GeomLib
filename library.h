@@ -256,6 +256,7 @@ FloatType CrossProduct(Vector a, Vector b);
 
 FloatType Length(Vector a);
 FloatType Length(Segment a);
+
 FloatType Distance(Point a, Line b);
 FloatType Distance(Point a, Point b);
 FloatType Distance(Point a, Segment b);
@@ -522,6 +523,16 @@ Line operator*(Line a, FloatType b)
 Line operator/(Line a, FloatType b)
 {
 	return GetLine(a.a / b, a.b / b, a.c / b);
+}
+
+FloatType Length(Vector a)
+{
+	return sqrt(a.x * a.x + a.y * a.y);
+}
+
+FloatType Length(Segment a)
+{
+	return Length(a.a - a.b);
 }
 
 #endif //GEOMLIB_LIBRARY_H
