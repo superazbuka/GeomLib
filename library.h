@@ -76,7 +76,7 @@ public:
 	/**
 	 * Initial point of ray.
 	 */
-	Point a;
+	Point p;
 	/**
 	 * Directive vector of ray.
 	 */
@@ -345,7 +345,7 @@ Vector operator-(Point a, Point b)
 
 bool operator==(Ray a, Ray b)
 {
-	return a.a == b.a and a.v / Length(a.v) == b.v / Length(b.v);
+	return a.p == b.p and a.v / Length(a.v) == b.v / Length(b.v);
 }
 
 bool operator==(Segment a, Segment b)
@@ -398,7 +398,7 @@ Line GetLine(Point a, Vector v)
 
 Line GetLine(Ray r)
 {
-	return GetLine(r.a, r.v);
+	return GetLine(r.p, r.v);
 }
 
 Line GetLine(Segment s)
@@ -481,13 +481,13 @@ std::ostream& operator<<(std::ostream& out, Segment a)
 
 std::istream& operator>>(std::istream& in, Ray& a)
 {
-	in >> a.a >> a.v;
+	in >> a.p >> a.v;
 	return in;
 }
 
 std::ostream& operator<<(std::ostream& out, Ray a)
 {
-	out << a.a << " " << a.v;
+	out << a.p << " " << a.v;
 	return out;
 }
 
