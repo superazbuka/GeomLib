@@ -228,6 +228,7 @@ bool operator==(Vector a, Vector b);
 bool operator==(Line a, Line b);
 bool operator==(Ray a, Ray b);
 bool operator==(Segment a, Segment b);
+
 std::istream& operator>>(std::istream& in, Point& a);
 std::ostream& operator<<(std::ostream& out, Point a);
 std::istream& operator>>(std::istream& in, Vector& a);
@@ -236,6 +237,7 @@ std::istream& operator>>(std::istream& in, Segment& a);
 std::ostream& operator<<(std::ostream& out, Segment a);
 std::istream& operator>>(std::istream& in, Ray& a);
 std::ostream& operator<<(std::ostream& out, Ray a);
+
 Point operator+(Point a, Vector b);
 Point operator-(Point a, Vector b);
 Vector operator+(Vector a, Vector b);
@@ -288,6 +290,67 @@ std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersecti
 bool Equal(const FloatType a, const FloatType b)
 {
 	return std::abs(a - b) <= EPS;
+}
+
+bool operator==(Point a, Point b)
+{
+	return Equal(a.x, b.y) and Equal(a.y, b.y);
+}
+
+bool operator==(Vector a, Vector b)
+{
+	return Equal(a.x, b.x) and Equal(a.y, b.y);
+}
+
+bool operator==(Line a, Line b)
+{
+	FloatType len_a = std::sqrt((a.a * a.a) + (a.b * a.b));
+	FloatType len_b = std::sqrt((b.a * b.a) + (b.b * b.b));
+	return Equal(a.a / len_a, b.a / len_b) and Equal(a.b / len_a, b.b / len_b) and Equal(a.c / len_a, b.c / len_b);
+}
+
+Point operator+(Point a, Vector b)
+{
+	return {a.x + b.x, a.y + b.y};
+}
+
+Point operator-(Point a, Vector b)
+{
+	return {a.x - b.x, a.y - b.y};
+}
+
+Vector operator+(Vector a, Vector b)
+{
+	return {a.x + b.x, a.y + b.y};
+}
+
+Vector operator*(Vector a, FloatType b)
+{
+	return {a.x * b, a.y * b};
+}
+Vector operator*(FloatType a, Vector b)
+{
+	return {b.x * a, b.y * a};
+}
+
+Vector operator/(Vector a, FloatType b)
+{
+	return {a.x / b, a.y / b};
+}
+
+Vector operator-(Point a, Point b)
+{
+	return {b.x - a.x, b.y - a.y};
+}
+
+bool operator==(Ray a, Ray b)
+{
+	return a.a == b.a and a.v / Length(a.v) == b.v / Length(b.v);
+}
+
+bool operator==(Segment a, Segment b)
+{
+	return ((a.a == b.a) and (a.b == b.b)) or ((a.b == b.a) and (a.a == b.b));
 }
 
 Point GetPoint(FloatType x, FloatType y)
