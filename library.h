@@ -76,7 +76,7 @@ public:
 	/**
 	 * Initial point of ray.
 	 */
-	Point a;
+	Point p;
 	/**
 	 * Directive vector of ray.
 	 */
@@ -217,11 +217,10 @@ Ray GetRay(Point a, Vector v);
  * @}
  */
 
-Point GetPointOnThisLine(Line a); //TODO: try to avoid
-Vector GetNormalVector(Line a); //TODO: normalize?
-Vector GetDirectiveVector(Line a); //TODO: normalize? nado li?
-Vector GetNormalForm(Vector v); //TODO: implement
-Vector GetDirectiveVector(Ray a); //TODO: implement, normalize?
+Vector GetNormalVector(Line a);
+Vector GetNormalForm(Vector v);
+Vector GetDirectiveVector(Ray a);
+
 Line GetNormalForm(Line a);
 bool Equal(FloatType a, FloatType b);
 bool operator==(Point a, Point b);
@@ -229,14 +228,16 @@ bool operator==(Vector a, Vector b);
 bool operator==(Line a, Line b);
 bool operator==(Ray a, Ray b);
 bool operator==(Segment a, Segment b);
+
 std::istream& operator>>(std::istream& in, Point& a);
 std::ostream& operator<<(std::ostream& out, Point a);
 std::istream& operator>>(std::istream& in, Vector& a);
-std::ostream& operator<<(std::ostream& in, Vector a);
+std::ostream& operator<<(std::ostream& out, Vector a);
 std::istream& operator>>(std::istream& in, Segment& a);
 std::ostream& operator<<(std::ostream& out, Segment a);
 std::istream& operator>>(std::istream& in, Ray& a);
 std::ostream& operator<<(std::ostream& out, Ray a);
+
 Point operator+(Point a, Vector b);
 Point operator-(Point a, Vector b);
 Vector operator+(Vector a, Vector b);
@@ -244,14 +245,18 @@ Vector operator*(Vector a, FloatType b);
 Vector operator*(FloatType a, Vector b);
 Vector operator/(Vector a, FloatType b);
 Vector operator-(Point a, Point b);
-Line operator+(Line a, Vector v); //TODO: implement
-Line operator-(Line a, Vector v); //TODO: implement
+
+Line operator+(Line a, Vector v);
+Line operator-(Line a, Vector v);
 Line operator*(Line a, FloatType b);
 Line operator/(Line a, FloatType b);
-FloatType operator*(Vector a, Vector b); //TODO: replace with functions
-FloatType operator^(Vector a, Vector b); //TODO: replace with functions
+
+FloatType DotProduct(Vector a, Vector b);
+FloatType CrossProduct(Vector a, Vector b);
+
 FloatType Length(Vector a);
 FloatType Length(Segment a);
+
 FloatType Distance(Point a, Line b);
 FloatType Distance(Point a, Point b);
 FloatType Distance(Point a, Segment b);
@@ -291,6 +296,67 @@ bool Equal(const FloatType a, const FloatType b)
 	return std::abs(a - b) <= EPS;
 }
 
+bool operator==(Point a, Point b)
+{
+	return Equal(a.x, b.y) and Equal(a.y, b.y);
+}
+
+bool operator==(Vector a, Vector b)
+{
+	return Equal(a.x, b.x) and Equal(a.y, b.y);
+}
+
+bool operator==(Line a, Line b)
+{
+	FloatType len_a = std::sqrt((a.a * a.a) + (a.b * a.b));
+	FloatType len_b = std::sqrt((b.a * b.a) + (b.b * b.b));
+	return Equal(a.a / len_a, b.a / len_b) and Equal(a.b / len_a, b.b / len_b) and Equal(a.c / len_a, b.c / len_b);
+}
+
+Point operator+(Point a, Vector b)
+{
+	return {a.x + b.x, a.y + b.y};
+}
+
+Point operator-(Point a, Vector b)
+{
+	return {a.x - b.x, a.y - b.y};
+}
+
+Vector operator+(Vector a, Vector b)
+{
+	return {a.x + b.x, a.y + b.y};
+}
+
+Vector operator*(Vector a, FloatType b)
+{
+	return {a.x * b, a.y * b};
+}
+Vector operator*(FloatType a, Vector b)
+{
+	return {b.x * a, b.y * a};
+}
+
+Vector operator/(Vector a, FloatType b)
+{
+	return {a.x / b, a.y / b};
+}
+
+Vector operator-(Point a, Point b)
+{
+	return {b.x - a.x, b.y - a.y};
+}
+
+bool operator==(Ray a, Ray b)
+{
+	return a.p == b.p and a.v / Length(a.v) == b.v / Length(b.v);
+}
+
+bool operator==(Segment a, Segment b)
+{
+	return ((a.a == b.a) and (a.b == b.b)) or ((a.b == b.a) and (a.a == b.b));
+}
+
 Point GetPoint(FloatType x, FloatType y)
 {
 	return {x, y};
@@ -328,7 +394,7 @@ Line GetLine(Point a, Point b)
 	if(a == b)
 		throw;
 	return {b.y - a.y, a.x - b.x, b.x * a.y - a.x * b.y};
-}
+};
 
 Line GetLine(Point a, Vector v)
 {
@@ -341,7 +407,7 @@ Line GetLine(Ray r)
 {
 	if(Equal(r.v.x, 0) and Equal(r.v.y, 0))
 		throw;
-	return {r.v.y, -r.v.x, r.a.y * r.v.x - r.a.x * r.v.y};
+	return {r.v.y, -r.v.x, r.p.y * r.v.x - r.p.x * r.v.y};
 }
 
 Line GetLine(Segment s)
@@ -349,6 +415,131 @@ Line GetLine(Segment s)
 	if(s.a == s.b)
 		throw;
 	return {s.b.y - s.a.y, s.a.x - s.b.x, s.b.x * s.a.y - s.a.x * s.b.y};
+}
+
+Segment GetSegment(Point a, Point b)
+{
+	return {a, b};
+}
+
+Segment GetSegment(Point a, Vector v)
+{
+	return {a, GetPoint(a.x + v.x, a.y + v.y)};
+}
+
+Ray GetRay(Point a, Point b)
+{
+	return {a, GetVector(a, b)};
+}
+
+Ray GetRay(Point a, Vector v)
+{
+	return {a, v};
+}
+ 
+
+Vector GetNormalVector(Line a)
+{
+	return GetVector(a.a, a.b);
+}
+
+Vector GetNormalForm(Vector v)
+{
+	FloatType len = std::sqrt(v.x * v.x + v.y * v.y);
+	return GetVector(v.x / len, v.y / len);
+}
+
+Vector GetDirectiveVector(Ray a)
+{
+	return a.v;
+}
+
+std::istream& operator>>(std::istream& in, Point& a)
+{
+	in >> a.x >> a.y;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Point a)
+{
+	out << a.x << " " << a.y;
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Vector& a)
+{
+	in >> a.y >> a.y;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Vector a)
+{
+	out << a.x << " " << a.y;
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Segment& a)
+{
+	in >> a.a >> a.b;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Segment a)
+{
+	out << a.a << " " << a.b;
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, Ray& a)
+{
+	in >> a.p >> a.v;
+	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, Ray a)
+{
+	out << a.p << " " << a.v;
+	return out;
+}
+
+Line operator+(Line a, Vector v)
+{
+	return {a.a, a.b, a.c + DotProduct(GetNormalForm(GetNormalVector(a)), v)};
+}
+
+Line operator-(Line a, Vector v)
+{
+	return {a.a, a.b, a.c - DotProduct(GetNormalForm(GetNormalVector(a)), v)};
+}
+
+FloatType DotProduct(Vector a, Vector b)
+{
+	return a.x * b.x + a.y * b.y;
+}
+
+FloatType CrossProduct(Vector a, Vector b)
+{
+	return a.x * b.y - a.y * b.x;
+}
+
+Line operator*(Line a, FloatType b)
+{
+	return GetLine(a.a * b, a.b * b, a.c * b);
+}
+
+Line operator/(Line a, FloatType b)
+{
+	return GetLine(a.a / b, a.b / b, a.c / b);
+}
+
+FloatType Length(Vector a)
+{
+	return sqrt(a.x * a.x + a.y * a.y);
+}
+
+FloatType Length(Segment a)
+{
+	return Length(a.a - a.b);
 }
 
 #endif //GEOMLIB_LIBRARY_H
