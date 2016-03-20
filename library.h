@@ -261,15 +261,18 @@ FloatType Distance(Point a, Line b);
 FloatType Distance(Point a, Point b);
 FloatType Distance(Point a, Segment b);
 FloatType Distance(Point a, Ray b);
+
+FloatType Distance(Line a, Point b);
+FloatType Distance(Ray a, Point b);
+FloatType Distance(Segment a, Point b);
+inline FloatType Sqr(const FloatType &a);
+
 FloatType Distance(Line a, Ray b);
 FloatType Distance(Line a, Line b);
-FloatType Distance(Line a, Point b);
 FloatType Distance(Line a, Segment b);
-FloatType Distance(Ray a, Point b);
 FloatType Distance(Ray a, Line b);
 FloatType Distance(Ray a, Ray b);
 FloatType Distance(Ray a, Segment b);
-FloatType Distance(Segment a, Point b);
 FloatType Distance(Segment a, Line b);
 FloatType Distance(Segment a, Ray b); //TODO: implement
 FloatType Distance(Segment a, Segment b); //TODO: implement
@@ -540,6 +543,49 @@ FloatType Length(Vector a)
 FloatType Length(Segment a)
 {
 	return Length(a.a - a.b);
+}
+
+
+FloatType Distance(Point a, Line b)
+{
+	FloatType err = std::sqrt(b.a * b.a + b.b * b.b);
+	return (a.x * b.a + a.y * b.b + b.c) / err;
+}
+
+inline FloatType Sqr(const FloatType &a)
+{
+	return a * a;
+}
+
+FloatType Distance(Point a, Point b)
+{
+	return std::sqrt(Sqr(a.x - b.x) + Sqr(a.y - b.y));
+}
+
+FloatType Distance(Point a, Ray b)
+{
+	if (DotProduct(b.v, GetVector(b.p, a)) < 0)
+		return Distance(a, b.p);
+	return Distance(a, GetLine(b));
+}
+FloatType Distance(Point a, Segment b)
+{
+	return std::max(Distance(a, GetRay(b.a, b.b)), Distance(a, GetRay(b.b, b.a)));
+}
+
+FloatType Distance(Line a, Point b)
+{
+	return Distance(b, a);
+}
+
+FloatType Distance(Ray a, Point b)
+{
+	return Distance(b, a);
+}
+
+FloatType Distance(Segment a, Point b)
+{
+	return Distance(b, a);
 }
 
 #endif //GEOMLIB_LIBRARY_H
