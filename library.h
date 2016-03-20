@@ -101,6 +101,46 @@ public:
  * @}
  */
 
+enum TypeOfIntersect
+{
+	NONE,
+	POINT,
+	LINE,
+	SEGMENT,
+	RAY
+};
+
+struct Intersection
+{
+	void * data;
+	TypeOfIntersect t;
+};
+
+void IntersectCase(Intersection its, void (*ForNONE)(), void (*ForPOINT)(Point p), void (*ForLINE)(Line a), void (*ForRAY)(Ray r), void (*ForSEGMENT)(Segment s))
+{
+	if (its.t == NONE)
+		ForNONE();
+	else if (its.t == POINT)
+	{
+		ForPOINT(*((Point*)its.data));
+	}
+	else if (its.t == LINE)
+	{
+		ForLINE(*((Line*)its.data));
+	}
+	else if (its.t == RAY)
+	{
+		ForRAY(*((Ray*)its.data));
+	}
+	else if (its.t == SEGMENT)
+	{
+		ForSEGMENT(*((Segment*)its.data));
+	}
+}
+
+
+
+
 /** @defgroup constructors
  * Constructors for geometry objects.
  *  @{
@@ -277,6 +317,7 @@ FloatType Distance(Segment a, Line b);
 FloatType Distance(Segment a, Ray b); //TODO: implement
 FloatType Distance(Segment a, Segment b); //TODO: implement
 FloatType GetDeterminant(FloatType a, FloatType b, FloatType c, FloatType d);
+
 std::vector<Point> Intersect(Point a, Line b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Ray b); //TODO: avoid
 std::vector<Point> Intersect(Point a, Point b); //TODO: avoid
