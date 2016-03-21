@@ -10,6 +10,8 @@
 #include <cmath>
 #include <vector>
 
+namespace geom
+{
 typedef double FloatType;
 const FloatType EPS = 1e-5;
 
@@ -116,27 +118,6 @@ struct Intersection
 	TypeOfIntersect t;
 };
 
-void IntersectCase(Intersection its, void (*ForNONE)(), void (*ForPOINT)(Point p), void (*ForLINE)(Line a), void (*ForRAY)(Ray r), void (*ForSEGMENT)(Segment s))
-{
-	if (its.t == NONE)
-		ForNONE();
-	else if (its.t == POINT)
-	{
-		ForPOINT(*((Point*)its.data));
-	}
-	else if (its.t == LINE)
-	{
-		ForLINE(*((Line*)its.data));
-	}
-	else if (its.t == RAY)
-	{
-		ForRAY(*((Ray*)its.data));
-	}
-	else if (its.t == SEGMENT)
-	{
-		ForSEGMENT(*((Segment*)its.data));
-	}
-}
 
 
 
@@ -334,6 +315,8 @@ std::vector<Point> Intersect(Segment a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
+
+void IntersectCase(Intersection its, void (*ForNONE)(), void (*ForPOINT)(Point p), void (*ForLINE)(Line a), void (*ForRAY)(Ray r), void (*ForSEGMENT)(Segment s));
 
 bool Equal(const FloatType a, const FloatType b)
 {
@@ -627,6 +610,34 @@ FloatType Distance(Ray a, Point b)
 FloatType Distance(Segment a, Point b)
 {
 	return Distance(b, a);
+}
+
+void IntersectCase(Intersection its, 
+		void (*ForNONE)() = [](){}, 
+		void (*ForPOINT)(Point p) = [](Point){},
+		void (*ForLINE)(Line a) = [](Line){},
+		void (*ForRAY)(Ray r) = [](Ray){},
+		void (*ForSEGMENT)(Segment s) = [](Segment){})
+{
+	if (its.t == NONE)
+		ForNONE();
+	else if (its.t == POINT)
+	{
+		ForPOINT(*((Point*)its.data));
+	}
+	else if (its.t == LINE)
+	{
+		ForLINE(*((Line*)its.data));
+	}
+	else if (its.t == RAY)
+	{
+		ForRAY(*((Ray*)its.data));
+	}
+	else if (its.t == SEGMENT)
+	{
+		ForSEGMENT(*((Segment*)its.data));
+	}
+}
 }
 
 #endif //GEOMLIB_LIBRARY_H
