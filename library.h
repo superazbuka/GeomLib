@@ -238,6 +238,13 @@ Ray GetRay(Point a, Vector v);
  * @}
  */
 
+Intersection GetIntersection(TypeOfIntersect t, void* data);
+Intersection GetIntersection(Point a);
+Intersection GetIntersection(Line a);
+Intersection GetIntersection(Ray a);
+Intersection GetIntersection(Segment a);
+
+
 Vector GetNormalVector(Line a);
 Vector GetNormalForm(Vector v);
 Vector GetDirectiveVector(Ray a);
@@ -316,7 +323,40 @@ std::vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Inters
 std::vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
 
-void IntersectCase(Intersection its, void (*ForNONE)(), void (*ForPOINT)(Point p), void (*ForLINE)(Line a), void (*ForRAY)(Ray r), void (*ForSEGMENT)(Segment s));
+Point CastToPoint(Intersection is);
+Line CastToLine(Intersection is);
+Segment CastToSegment(Intersection is);
+Ray CastToRay(Intersection is);
+
+Point CastToPoint(Intersection is)
+{
+	if (is.t != POINT)
+		throw;
+	return *((Point*)is.data);
+}
+
+Line CastToLine(Intersection is)
+{
+	if (is.t != POINT)
+		throw;
+	return *((Line*)is.data);
+}
+
+Segment CastToSegment(Intersection is)
+{
+	if (is.t != POINT)
+		throw;
+	return *((Segment*)is.data);
+}
+
+Ray CastToRay(Intersection is)
+{
+	if (is.t != POINT)
+		throw;
+	return *((Ray*)is.data);
+}
+
+void IntersectCase(Intersection its, void (*for_none)(), void (*for_point)(Point p), void (*for_line)(Line a), void (*for_ray)(Ray r), void (*for_segment)(Segment s));
 
 bool Equal(const FloatType a, const FloatType b)
 {
@@ -569,7 +609,6 @@ FloatType Length(Segment a)
 	return Length(a.a - a.b);
 }
 
-
 FloatType Distance(Point a, Line b)
 {
 	FloatType err = std::sqrt(b.a * b.a + b.b * b.b);
@@ -612,32 +651,61 @@ FloatType Distance(Segment a, Point b)
 	return Distance(b, a);
 }
 
-void IntersectCase(Intersection its, 
-		void (*ForNONE)() = [](){}, 
-		void (*ForPOINT)(Point p) = [](Point){},
-		void (*ForLINE)(Line a) = [](Line){},
-		void (*ForRAY)(Ray r) = [](Ray){},
-		void (*ForSEGMENT)(Segment s) = [](Segment){})
+void IntersectCase(Intersection its,
+		void (*for_none)() = [](){},
+		void (*for_point)(Point p) = [](Point){},
+		void (*for_line)(Line a) = [](Line){},
+		void (*for_ray)(Ray r) = [](Ray){},
+		void (*for_segment)(Segment s) = [](Segment){})
 {
 	if (its.t == NONE)
-		ForNONE();
+		for_none();
 	else if (its.t == POINT)
 	{
-		ForPOINT(*((Point*)its.data));
+		for_point(CastToPoint(its));
 	}
 	else if (its.t == LINE)
 	{
-		ForLINE(*((Line*)its.data));
+		for_line(CastToLine(its));
 	}
 	else if (its.t == RAY)
 	{
-		ForRAY(*((Ray*)its.data));
+		for_ray(CastToRay(its));
 	}
 	else if (its.t == SEGMENT)
 	{
-		ForSEGMENT(*((Segment*)its.data));
+		for_segment(CastToSegment(its));
 	}
 }
+
+Intersection GetIntersection(TypeOfIntersect t, void* data)
+{
+	Intersection a;
+	a.t = t;
+	a.data = data;
+	return a;
+}
+
+Intersection GetIntersection(Point a)
+{
+	return GetIntersection(POINT, ((void*)(&a)));
+}
+
+Intersection GetIntersection(Line a)
+{
+	return GetIntersection(LINE , ((void*)(&a)));
+}
+
+Intersection GetIntersection(Ray a)
+{
+	return GetIntersection(RAY, ((void*)(&a)));
+}
+
+Intersection GetIntersection(Segment a)
+{
+	return GetIntersection(SEGMENT, ((void*)(&a)));
+}
+
 }
 
 #endif //GEOMLIB_LIBRARY_H
