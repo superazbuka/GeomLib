@@ -306,14 +306,9 @@ FloatType Distance(Segment a, Ray b); //TODO: implement
 FloatType Distance(Segment a, Segment b); //TODO: implement
 FloatType GetDeterminant(FloatType a, FloatType b, FloatType c, FloatType d);
 
-std::vector<Point> Intersect(Point a, Line b); //TODO: avoid
-std::vector<Point> Intersect(Point a, Ray b); //TODO: avoid
-std::vector<Point> Intersect(Point a, Point b); //TODO: avoid
-std::vector<Point> Intersect(Point a, Segment b); //TODO: avoid
-std::vector<Point> Intersect(Line a, Line b); //TODO: return type = Intersection(None, Point, Line)
-std::vector<Point> Intersect(Line a, Ray b); //TODO: return type = Intersection(None, Point, Ray)
-std::vector<Point> Intersect(Line a, Point b); //TODO: avoid
-std::vector<Point> Intersect(Line a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
+Intersection Intersect(Line a, Line b); //TODO: return type = Intersection(None, Point, Line)
+Intersection Intersect(Line a, Ray b); //TODO: return type = Intersection(None, Point, Ray)
+Intersection Intersect(Line a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Ray a, Line b); //TODO: return type = Intersection(None, Point, Ray)
 std::vector<Point> Intersect(Ray a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
@@ -356,7 +351,6 @@ Ray CastToRay(Intersection is)
 	return *((Ray*)is.data);
 }
 
-void IntersectCase(Intersection its, void (*for_none)(), void (*for_point)(Point p), void (*for_line)(Line a), void (*for_ray)(Ray r), void (*for_segment)(Segment s));
 
 bool Equal(const FloatType a, const FloatType b)
 {
@@ -631,6 +625,7 @@ FloatType Distance(Point a, Ray b)
 		return Distance(a, b.p);
 	return Distance(a, GetLine(b));
 }
+
 FloatType Distance(Point a, Segment b)
 {
 	return std::max(Distance(a, GetRay(b.a, b.b)), Distance(a, GetRay(b.b, b.a)));
@@ -651,39 +646,17 @@ FloatType Distance(Segment a, Point b)
 	return Distance(b, a);
 }
 
-void IntersectCase(Intersection its,
-		void (*for_none)() = [](){},
-		void (*for_point)(Point p) = [](Point){},
-		void (*for_line)(Line a) = [](Line){},
-		void (*for_ray)(Ray r) = [](Ray){},
-		void (*for_segment)(Segment s) = [](Segment){})
-{
-	if (its.t == NONE)
-		for_none();
-	else if (its.t == POINT)
-	{
-		for_point(CastToPoint(its));
-	}
-	else if (its.t == LINE)
-	{
-		for_line(CastToLine(its));
-	}
-	else if (its.t == RAY)
-	{
-		for_ray(CastToRay(its));
-	}
-	else if (its.t == SEGMENT)
-	{
-		for_segment(CastToSegment(its));
-	}
-}
-
 Intersection GetIntersection(TypeOfIntersect t, void* data)
 {
 	Intersection a;
 	a.t = t;
 	a.data = data;
 	return a;
+}
+
+Intersection GetIntersection()
+{
+	return GetIntersection(NONE, (void*)(new int()));
 }
 
 Intersection GetIntersection(Point a)
@@ -704,6 +677,70 @@ Intersection GetIntersection(Ray a)
 Intersection GetIntersection(Segment a)
 {
 	return GetIntersection(SEGMENT, ((void*)(&a)));
+}
+
+bool IsParallel(const Line &a, const Line &b)
+{
+	return Equal(a.a * b.b - a.b * b.a, 0);
+}
+
+FloatType GetDeterminant(FloatType a, FloatType b, FloatType c, FloatType d)
+{
+	return a * d - c * b;
+}
+
+Intersection Intersect(Line a, Line b)
+{
+	FloatType zn = GetDeterminant(a.a, a.b, b.a, b.b);
+	if (Equal(zn, 0))
+	{
+		return GetIntersection();
+	}
+	return GetIntersection(GetPoint(-GetDeterminant(a.c, a.b, b.c, b.b) / zn,
+				-GetDeterminant(a.a, a.c, b.a, b.c) / zn));
+}
+
+bool OnLine(Line a, Point b)
+{
+	return Equal(a.a * b.x + a.b + b.y + a.c, 0);
+}
+
+bool OnRay(Ray a, Point b)
+{
+	return Equal(CrossProduct(a.v, b - a.p), 0) and DotProduct(a.v, b - a.p) >= 0;
+}
+
+bool OnSegment(Segment a, Point b)
+{
+	return OnRay(GetRay(a.a, a.b), b) and DotProduct(a.a - a.b, b - a.b) >= 0;
+}
+
+Intersection Intersect(Line a, Ray b)
+{
+	Intersection its = Intersect(a, GetLine(b));
+	if (its.t == NONE)
+		return its;
+	if (its.t == LINE)
+		return GetIntersection(b);
+	Point p = CastToPoint(its);
+	if (OnRay(b, p))
+		return its;
+	else
+		return GetIntersection();
+}
+
+Intersection Intersect(Line a, Segment b)
+{
+	Intersection its = Intersect(a, GetLine(b));
+	if (its.t == NONE)
+		return its;
+	if (its.t == LINE)
+		return GetIntersection(b);
+	Point p = CastToPoint(its);
+	if (OnSegment(b, p))
+		return its;
+	else
+		return GetIntersection();
 }
 
 }
