@@ -306,16 +306,17 @@ FloatType Distance(Segment a, Ray b); //TODO: implement
 FloatType Distance(Segment a, Segment b); //TODO: implement
 FloatType GetDeterminant(FloatType a, FloatType b, FloatType c, FloatType d);
 
-Intersection Intersect(Line a, Line b); //TODO: return type = Intersection(None, Point, Line)
-Intersection Intersect(Line a, Ray b); //TODO: return type = Intersection(None, Point, Ray)
-Intersection Intersect(Line a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-std::vector<Point> Intersect(Ray a, Line b); //TODO: return type = Intersection(None, Point, Ray)
+Intersection Intersect(Line a, Line b);
+Intersection Intersect(Line a, Ray b);
+Intersection Intersect(Line a, Segment b);
+Intersection Intersect(Ray a, Line b);
+Intersection Intersect(Segment a, Line b);
+
 std::vector<Point> Intersect(Ray a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
 std::vector<Point> Intersect(Ray a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Point b); //TODO: avoid
 std::vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-std::vector<Point> Intersect(Segment a, Line b); //TODO: return type = Intersection(None, Point, Segment)
 std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
 
 Point CastToPoint(Intersection is);
@@ -741,6 +742,16 @@ Intersection Intersect(Line a, Segment b)
 		return its;
 	else
 		return GetIntersection();
+}
+
+Intersection Intersect(Ray a, Line b)
+{
+	return Intersect(b, a);
+}
+
+Intersection Intersect(Segment a, Line b)
+{
+	return Intersect(b, a);
 }
 
 }
