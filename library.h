@@ -312,12 +312,11 @@ Intersection Intersect(Line a, Segment b);
 Intersection Intersect(Ray a, Line b);
 Intersection Intersect(Segment a, Line b);
 
-std::vector<Point> Intersect(Ray a, Point b); //TODO: avoid
-std::vector<Point> Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
-std::vector<Point> Intersect(Ray a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-std::vector<Point> Intersect(Segment a, Point b); //TODO: avoid
-std::vector<Point> Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
-std::vector<Point> Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
+Intersection Intersect(Ray a, Ray b); //TODO: return type = Intersection(None, Point, Segment, Ray)
+Intersection Intersect(Ray a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
+Intersection Intersect(Segment a, Point b); //TODO: avoid
+Intersection Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
+Intersection Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
 
 Point CastToPoint(Intersection is);
 Line CastToLine(Intersection is);
@@ -753,6 +752,72 @@ Intersection Intersect(Segment a, Line b)
 {
 	return Intersect(b, a);
 }
+
+bool IsNONE(Intersection its)
+{
+	return its.t == NONE;
+}
+
+bool IsPOINT(Intersection its)
+{
+	return its.t == POINT;
+}
+
+bool IsLINE(Intersection its)
+{
+	return its.t == LINE;
+}
+
+bool IsRAY(Intersection its)
+{
+	return its.t == RAY;
+}
+
+bool IsSEGMENT(Intersection its)
+{
+	return its.t == SEGMENT;
+}
+
+Intersection Intersect(Ray a, Ray b)
+{
+	auto its = Intersect(GetLine(a), b);
+	if (IsNONE(its))
+		return GetIntersection();
+	else if (IsPOINT(its))
+	{
+		if (OnRay(b, CastToPoint(its)))
+		{
+			return its;
+		}
+		else
+		{
+			return GetIntersection();
+		}
+	}
+	else
+	{
+		Ray cr = CastToRay(its);
+		if (DotProduct(cr.v, b.v) <= 0)
+		{
+			return GetIntersection(GetSegment(cr.p, b.p));
+		}
+		else
+		{
+			if (DotProduct(cr.p - b.p, b.v) >= 0)
+			{
+				return GetIntersection(b);
+			}
+			else
+			{
+				return GetIntersection(cr);
+			}
+		}
+	}
+}
+
+Intersection Intersect(Segment a, Point b); //TODO: avoid
+Intersection Intersect(Segment a, Segment b); //TODO: return type = Intersection(None, Point, Segment)
+Intersection Intersect(Segment a, Ray b); //TODO: return type = Intersection(None, Point, Segment)
 
 }
 
